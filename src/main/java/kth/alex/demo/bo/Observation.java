@@ -1,6 +1,5 @@
 package kth.alex.demo.bo;
 import jakarta.persistence.*;
-
 import java.time.LocalDateTime;
 
 @Entity
@@ -14,20 +13,33 @@ public class Observation {
     @JoinColumn(name="socialNr", referencedColumnName="socialNr")
     private Patient patient;
 
+    @ManyToOne
+    @JoinColumn(name="employeeId", referencedColumnName="employeeId")
+    private Person employee;
     @Column(name = "description")
     private String description;
 
     @Column(name = "createdAt")
     private LocalDateTime createdAt;
     public Observation() {
+        super();
+        this.createdAt = LocalDateTime.now();
     }
 
-    public Patient getPatient() {  // Change Person to Patient
+    public Patient getPatient() {
         return patient;
     }
 
-    public void setPatient(Patient patient) {  // Change Person to Patient
+    public void setPatient(Patient patient) {
         this.patient = patient;
+    }
+
+    public Person getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(Person employee) {
+        this.employee = employee;
     }
 
     public String getDescription() {

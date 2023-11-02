@@ -1,18 +1,19 @@
 package kth.alex.demo.bo;
+
 import jakarta.persistence.*;
 
 import java.util.List;
 
 @Entity
-@Table(name = "doctor")
-public class Doctor extends Person{
-
+@Table(name = "OtherPersonal")
+public class OtherPersonal extends Person{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int employeeId;
 
     @OneToMany(mappedBy = "employee")
     private List<Message> messages;
-    public Doctor() {
+
+    public OtherPersonal() {
         super();
     }
 
@@ -40,10 +41,6 @@ public class Doctor extends Person{
         medicalCondition.setEmployee(this);
         //TODO gör anrop till DB
         System.out.println("ADDED TO DB: Patient = " + patient.toString() + ", Observation = " + description + ", set by = " + this.getSurename());
-    }
-    public void viewPatientInfo(Patient patient) {
-        String patientInfo = patient.viewSelfInfo();
-        System.out.println(patientInfo);
     }
 
     public void viewMessages() {

@@ -2,13 +2,11 @@ package kth.alex.demo.bo;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
-@Table(name = "person")
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(
-        name = "person_type",
-        discriminatorType = DiscriminatorType.STRING
-)
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class Person {
 
     public enum Gender {
@@ -28,6 +26,10 @@ public class Person {
     @Column(name = "socialNr")
     private String socialNr;
 
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "employeeId")
+    private int employeeId;
+
     @Column(name = "phoneNr")
     private String phoneNr;
 
@@ -35,7 +37,24 @@ public class Person {
     @Column(name = "gender")
     private Gender gender;
 
+    @OneToMany(mappedBy = "sender")
+    private List<Message> sentMessages;
+
+    @OneToMany(mappedBy = "recipient")
+    private List<Message> receivedMessages;
+
     public Person() {
+    }
+
+    public List<Message> getMessages() {
+        List<Message> allMessages = new ArrayList<>();
+        allMessages.addAll(sentMessages);
+        allMessages.addAll(receivedMessages);
+        return allMessages;
+    }
+
+    public int getEmployeeId() {
+        return employeeId;
     }
 
     public String getSurename() {
