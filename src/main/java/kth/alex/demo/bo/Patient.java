@@ -16,15 +16,11 @@ public class Patient extends Person{
     private List<MedicalCondition> medicalConditions;
     @OneToMany(mappedBy = "patient")
     private List<Message> messages;
-    private LocalDate localDate;
 
     public Patient() {
         super();
     }
 
-    public void setLocalDate(LocalDate localDate) {
-        this.localDate = localDate;
-    }
 
     public <T> String listToString(List<T> list) {
         return list.toString();
