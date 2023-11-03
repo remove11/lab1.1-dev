@@ -1,15 +1,13 @@
-package kth.alex.demo.bo;
+package kth.alex.demo.entity;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
+
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @Entity
-@Table(name = "person")
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(
-        name = "person_type",
-        discriminatorType = DiscriminatorType.STRING
-)
-public class Person {
+public abstract class Person {
 
     public enum Gender {
         MAN, WOMAN, OTHER;
@@ -35,7 +33,41 @@ public class Person {
     @Column(name = "gender")
     private Gender gender;
 
+    @OneToMany(mappedBy = "sender")
+    private List<Message> sentMsg;
+    @OneToMany(mappedBy = "receiver")
+    private List<Message> receivedMsg;
+
+    public void setSocialNr(String socialNr) {
+        this.socialNr = socialNr;
+    }
+
+    public void setSentMsg(List<Message> sentMsg) {
+        this.sentMsg = sentMsg;
+    }
+
+    public void setReceivedMsg(List<Message> receivedMsg) {
+        this.receivedMsg = receivedMsg;
+    }
+
+    public List<Message> getSentMsg() {
+        return sentMsg;
+    }
+
+    public List<Message> getReceivedMsg() {
+        return receivedMsg;
+    }
+
     public Person() {
+    }
+
+    public Person(String surename, String lastname, String adress, String socialNr, String phoneNr, Gender gender) {
+        this.surename = surename;
+        this.lastname = lastname;
+        this.adress = adress;
+        this.socialNr = socialNr;
+        this.phoneNr = phoneNr;
+        this.gender = gender;
     }
 
     public String getSurename() {
@@ -88,8 +120,8 @@ public class Person {
                 "surename='" + surename + '\'' +
                 ", lastname='" + lastname + '\'' +
                 ", adress='" + adress + '\'' +
-                ", socialNr=" + socialNr +
-                ", phoneNr=" + phoneNr +
+                ", socialNr='" + socialNr + '\'' +
+                ", phoneNr='" + phoneNr + '\'' +
                 ", gender=" + gender +
                 '}';
     }

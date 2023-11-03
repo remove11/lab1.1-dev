@@ -1,9 +1,5 @@
-package kth.alex.demo.bo;
-
+/*package kth.alex.demo.bo;
 import jakarta.persistence.*;
-import kth.alex.demo.bo.Patient;
-
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -17,6 +13,10 @@ public class Encounter {
     @JoinColumn(name="socialNr", referencedColumnName="socialNr")
     private Patient patient;
 
+    @ManyToOne
+    @JoinColumn(name="employeeId", referencedColumnName="employeeId")
+    private Person employee;
+
     @Column(name = "description")
     private String description;
 
@@ -25,6 +25,31 @@ public class Encounter {
 
     public Encounter() {
         super();
+        this.createdAt = LocalDateTime.now();
+    }
+
+    public Patient getPatient() {
+        return patient;
+    }
+
+    public void setPatient(Patient patient) {
+        this.patient = patient;
+    }
+
+    public Person getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(Person employee) {
+        this.employee = employee;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
     public String getDescription() {
@@ -35,3 +60,4 @@ public class Encounter {
         this.description = description;
     }
 }
+*/
