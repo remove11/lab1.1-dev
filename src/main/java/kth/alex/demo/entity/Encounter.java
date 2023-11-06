@@ -1,4 +1,4 @@
-/*package kth.alex.demo.bo;
+package kth.alex.demo.entity;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
@@ -9,13 +9,13 @@ public class Encounter {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name="socialNr", referencedColumnName="socialNr")
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "patient_social", nullable = false)
     private Patient patient;
 
-    @ManyToOne
-    @JoinColumn(name="employeeId", referencedColumnName="employeeId")
-    private Person employee;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="employeeId", nullable = false)
+    private Doctor createdBy;
 
     @Column(name = "description")
     private String description;
@@ -28,6 +28,14 @@ public class Encounter {
         this.createdAt = LocalDateTime.now();
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public Patient getPatient() {
         return patient;
     }
@@ -36,20 +44,12 @@ public class Encounter {
         this.patient = patient;
     }
 
-    public Person getEmployee() {
-        return employee;
+    public Doctor getCreatedBy() {
+        return createdBy;
     }
 
-    public void setEmployee(Person employee) {
-        this.employee = employee;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
+    public void setCreatedBy(Doctor createdBy) {
+        this.createdBy = createdBy;
     }
 
     public String getDescription() {
@@ -59,5 +59,19 @@ public class Encounter {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    @Override
+    public String toString() {
+        return "Encounter{" +
+                "id=" + id +
+                ", patient=" + patient +
+                ", employee=" + createdBy +
+                ", description='" + description + '\'' +
+                ", createdAt=" + createdAt +
+                '}';
+    }
 }
-*/

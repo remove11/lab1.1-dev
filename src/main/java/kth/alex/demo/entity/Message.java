@@ -18,17 +18,6 @@ public class Message {
     @Column(name = "createdAt")
     private LocalDateTime createdAt;
 
-    @Override
-    public String toString() {
-        return "Message{" +
-                "id=" + id +
-                ", sender=" + sender +
-                ", receiver=" + receiver +
-                ", content='" + content + '\'' +
-                ", createdAt=" + createdAt +
-                '}';
-    }
-
     public Message() {
         super();
         this.createdAt = LocalDateTime.now();
@@ -72,6 +61,17 @@ public class Message {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    @Override
+    public String toString() {
+        return "Message{" +
+                "id=" + id +
+                ", sender=" + sender +
+                ", receiver=" + receiver +
+                ", content='" + content + '\'' +
+                ", createdAt=" + createdAt +
+                '}';
     }
 }
 

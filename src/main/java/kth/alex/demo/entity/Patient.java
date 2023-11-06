@@ -1,5 +1,6 @@
 package kth.alex.demo.entity;
 import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 import java.time.LocalDate;
@@ -9,20 +10,17 @@ import java.util.List;
 @Table(name = "patient")
 public class Patient extends Person{
 
-    /*
-    @OneToMany(mappedBy = "patient")
-    private List<Observation> observations;
-    @OneToMany(mappedBy = "patient")
-    private List<Encounter> encounters;
+    @OneToMany(mappedBy = "sender")
+    private List<Message> sentMsg;
+    @OneToMany(mappedBy = "receiver")
+    private List<Message> receiverMsg;
     @OneToMany(mappedBy = "patient")
     private List<MedicalCondition> medicalConditions;
+
     @OneToMany(mappedBy = "patient")
-    private List<Message> messages;
+    private List<Encounter> encounter;
 
-    */
     private LocalDate createdAt;
-
-
 
     public Patient() {
         super();
@@ -57,15 +55,7 @@ public class Patient extends Person{
         System.out.println("Message sent: " + content);
     }
 
-    public List<Message> getMessages() {
-        //TODO gör anrop till DB för att hämta meddelanden
-        return new ArrayList<>();
-    }
+
     */
-
-    public <T> String listToString(List<T> list) {
-        return list.toString();
-    }
-
 
 }

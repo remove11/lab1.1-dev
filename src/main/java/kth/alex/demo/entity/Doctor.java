@@ -1,16 +1,18 @@
 package kth.alex.demo.entity;
 import jakarta.persistence.*;
 
+import java.util.List;
+
 
 @Entity
 @Table(name = "doctor")
 public class Doctor extends Employee{
 
-    /*
-    @OneToMany(mappedBy = "employee")
-    private List<Message> messages;
 
-     */
+    @OneToMany(mappedBy = "patient")
+    private List<MedicalCondition> writenMedicalConditions;
+
+
     @Column(name = "degreeId")
     String degreeId;
 

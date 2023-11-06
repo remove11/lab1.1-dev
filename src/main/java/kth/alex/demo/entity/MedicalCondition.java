@@ -1,7 +1,5 @@
-/*package kth.alex.demo.bo;
+package kth.alex.demo.entity;
 import jakarta.persistence.*;
-
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -11,15 +9,16 @@ public class MedicalCondition {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name="socialNr", referencedColumnName="socialNr")
-    private Patient patient;
-    @ManyToOne
-    @JoinColumn(name="employeeId", referencedColumnName="employeeId")
-    private Person employee;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "doctor_id", nullable = false)
+    private Doctor doctor;
 
-    @Column(name = "diagnosis")
-    private String diagnosis;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "patient_social", nullable = false)
+    private Patient patient;
+
+    @Column(name = "diagnos")
+    private String diagnos;
 
     @Column(name = "createdAt")
     private LocalDateTime createdAt;
@@ -29,43 +28,22 @@ public class MedicalCondition {
         this.createdAt = LocalDateTime.now();
     }
 
-    public Patient getPatient() {
-        return patient;
+    public String getDiagnos() {
+        return diagnos;
     }
 
-    public void setPatient(Patient patient) {
-        this.patient = patient;
-    }
-
-    public Person getEmployee() {
-        return employee;
-    }
-
-    public void setEmployee(Person employee) {
-        this.employee = employee;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public String setDescription() {
-        return diagnosis;
-    }
-
-    public void setDescription(String diagnosis) {
-        this.diagnosis = diagnosis;
+    public void setDiagnos(String diagnos) {
+        this.diagnos = diagnos;
     }
 
     @Override
     public String toString() {
-        return "Condition{" +
-                "diagnosis='" + diagnosis + '\'' +
+        return "MedicalCondition{" +
+                "id=" + id +
+                ", doctor=" + doctor +
+                ", patient=" + patient +
+                ", diagnos='" + diagnos + '\'' +
+                ", createdAt=" + createdAt +
                 '}';
     }
 }
-*/
