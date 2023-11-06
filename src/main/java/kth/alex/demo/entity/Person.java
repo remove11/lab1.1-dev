@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import java.util.List;
 
 
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@Inheritance(strategy = InheritanceType.JOINED)
 @Entity
 public abstract class Person {
 

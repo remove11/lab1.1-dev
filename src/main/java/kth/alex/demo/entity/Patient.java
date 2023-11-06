@@ -2,8 +2,7 @@ package kth.alex.demo.entity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -20,10 +19,11 @@ public class Patient extends Person{
     @OneToMany(mappedBy = "patient")
     private List<Encounter> encounter;
 
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
 
     public Patient() {
         super();
+        this.createdAt = LocalDateTime.now();
     }
 
 

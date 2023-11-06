@@ -12,7 +12,6 @@ import java.util.List;
 public class MessageService {
     @Autowired
     private MessageRepository messageRepository;
-    private Encounter encounter;
 
     public List<MessageDTO> getAll() {
         List<Message> messages = messageRepository.findAll();
@@ -24,8 +23,8 @@ public class MessageService {
             messageDTO.setId(m.getId());
             messageDTO.setContent(m.getContent());
             messageDTO.setCreatedAt(m.getCreatedAt());
-            messageDTO.setReceiverName("receiver");
-            messageDTO.setSenderName("sender");
+            //messageDTO.setReceiverName("receiver");
+            //messageDTO.setSenderName("sender");
 
             messageDTOs.add(messageDTO);
         }

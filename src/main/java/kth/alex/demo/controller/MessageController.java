@@ -1,10 +1,7 @@
 package kth.alex.demo.controller;
-
-import kth.alex.demo.entity.Message;
 import kth.alex.demo.entityDTO.MessageDTO;
 import kth.alex.demo.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 

@@ -1,11 +1,5 @@
 package kth.alex.demo.entityDTO;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import kth.alex.demo.entity.Person;
-
 import java.time.LocalDateTime;
 
 public class MessageDTO {
