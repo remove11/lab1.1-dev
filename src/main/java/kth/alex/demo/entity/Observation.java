@@ -1,4 +1,4 @@
-/*package kth.alex.demo.bo;
+package kth.alex.demo.entity;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
@@ -10,12 +10,13 @@ public class Observation {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name="socialNr", referencedColumnName="socialNr")
+    @JoinColumn(name = "patient_social", nullable = false)
     private Patient patient;
 
-    @ManyToOne
-    @JoinColumn(name="employeeId", referencedColumnName="employeeId")
-    private Person employee;
+    @ManyToOne()
+    @JoinColumn(name="employeeId", nullable = false)
+    private Doctor createdBy;
+
     @Column(name = "description")
     private String description;
 
@@ -26,6 +27,14 @@ public class Observation {
         this.createdAt = LocalDateTime.now();
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public Patient getPatient() {
         return patient;
     }
@@ -34,12 +43,12 @@ public class Observation {
         this.patient = patient;
     }
 
-    public Person getEmployee() {
-        return employee;
+    public Doctor getCreatedBy() {
+        return createdBy;
     }
 
-    public void setEmployee(Person employee) {
-        this.employee = employee;
+    public void setCreatedBy(Doctor createdBy) {
+        this.createdBy = createdBy;
     }
 
     public String getDescription() {
@@ -50,12 +59,12 @@ public class Observation {
         this.description = description;
     }
 
-    @Override
-    public String toString() {
-        return "Observation{" +
-                "description='" + description + '\'' +
-                '}';
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
 }
-*/
+

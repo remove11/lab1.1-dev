@@ -9,11 +9,11 @@ public class MedicalCondition {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne()
     @JoinColumn(name = "doctor_id", nullable = false)
     private Doctor doctor;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne()
     @JoinColumn(name = "patient_social", nullable = false)
     private Patient patient;
 
@@ -28,6 +28,30 @@ public class MedicalCondition {
         this.createdAt = LocalDateTime.now();
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Doctor getDoctor() {
+        return doctor;
+    }
+
+    public void setDoctor(Doctor doctor) {
+        this.doctor = doctor;
+    }
+
+    public Patient getPatient() {
+        return patient;
+    }
+
+    public void setPatient(Patient patient) {
+        this.patient = patient;
+    }
+
     public String getDiagnos() {
         return diagnos;
     }
@@ -36,14 +60,11 @@ public class MedicalCondition {
         this.diagnos = diagnos;
     }
 
-    @Override
-    public String toString() {
-        return "MedicalCondition{" +
-                "id=" + id +
-                ", doctor=" + doctor +
-                ", patient=" + patient +
-                ", diagnos='" + diagnos + '\'' +
-                ", createdAt=" + createdAt +
-                '}';
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 }

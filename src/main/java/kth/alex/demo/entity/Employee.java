@@ -6,6 +6,7 @@ import java.util.List;
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Employee extends Person {
+
     @Column(name = "employeeId")
     private int employeeId;
 
