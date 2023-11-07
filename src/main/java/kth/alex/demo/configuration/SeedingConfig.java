@@ -38,6 +38,8 @@ public class SeedingConfig {
 
             Encounter encounter = new Encounter();
             encounter.setDescription("Jag är encounter");
+            System.out.println("** Pat info is = " + patient.getSocialNr());
+            System.out.println("** doc info is = " + doctor.getSocialNr());
             encounter.setPatient(patient);
             encounter.setCreatedBy(doctor);
 

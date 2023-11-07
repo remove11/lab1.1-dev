@@ -8,10 +8,8 @@ import java.util.List;
 @Table(name = "doctor")
 public class Doctor extends Employee{
 
-
     @OneToMany(mappedBy = "patient")
     private List<MedicalCondition> writenMedicalConditions;
-
 
     @Column(name = "degreeId")
     String degreeId;
@@ -20,8 +18,21 @@ public class Doctor extends Employee{
         super();
     }
 
+    public List<MedicalCondition> getWritenMedicalConditions() {
+        return writenMedicalConditions;
+    }
 
+    public void setWritenMedicalConditions(List<MedicalCondition> writenMedicalConditions) {
+        this.writenMedicalConditions = writenMedicalConditions;
+    }
 
+    public String getDegreeId() {
+        return degreeId;
+    }
+
+    public void setDegreeId(String degreeId) {
+        this.degreeId = degreeId;
+    }
 
 
 

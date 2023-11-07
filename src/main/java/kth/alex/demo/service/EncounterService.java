@@ -2,17 +2,13 @@ package kth.alex.demo.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import kth.alex.demo.entity.Encounter;
-import kth.alex.demo.entity.Message;
 import kth.alex.demo.entityDTO.EncounterDTO;
-import kth.alex.demo.entityDTO.MessageDTO;
 import kth.alex.demo.repository.EncounterRepository;
-import kth.alex.demo.repository.MessageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class EncounterService {
@@ -25,7 +21,6 @@ public class EncounterService {
         List<EncounterDTO> encounterDTOs = new ArrayList<>();
         for (Encounter e : encounters) {
             EncounterDTO encounterDTO = new EncounterDTO();
-
             encounterDTO.setId(e.getId());
             encounterDTO.setDescription(e.getDescription());
             encounterDTO.setCreatedAt(e.getCreatedAt());
@@ -40,14 +35,10 @@ public class EncounterService {
     public EncounterDTO findById(Long id) {
         return encounterRepository.findById(id)
                 .map(e -> {
-                    System.out.println("hej--------------");
-                    //System.out.println(e);
-                    System.out.println("--------------");
-
                     EncounterDTO encounterDTO = new EncounterDTO();
                     encounterDTO.setId(e.getId());
-                    //encounterDTO.setCreatedBy(e.getCreatedBy());
-                   // encounterDTO.setPatient(e.getPatient());
+                    encounterDTO.setDoctorName(e.getCreatedBy().getSurename());
+                    encounterDTO.setPatientName(e.getPatient().getSurename());
                     encounterDTO.setDescription(e.getDescription());
                     encounterDTO.setCreatedAt(e.getCreatedAt());
                     return encounterDTO;

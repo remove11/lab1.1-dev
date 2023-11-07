@@ -1,9 +1,9 @@
 package kth.alex.demo.controller;
 import jakarta.persistence.EntityNotFoundException;
+import kth.alex.demo.entityDTO.DoctorDTO;
 import kth.alex.demo.entityDTO.EncounterDTO;
-import kth.alex.demo.entityDTO.MessageDTO;
+import kth.alex.demo.service.DoctorService;
 import kth.alex.demo.service.EncounterService;
-import kth.alex.demo.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,24 +13,25 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-public class EncounterController {
+public class DoctorController {
     @Autowired
-    private EncounterService encounterService;
+    private DoctorService doctorService;
 
-    @GetMapping("/encounter")
-    public List<EncounterDTO> sayHello() {
-        return encounterService.getAll();
+    @GetMapping("/doctor")
+    public List<DoctorDTO> sayHello() {
+        return doctorService.getAll();
     }
 
-    @GetMapping("/encounter/{id}")
-    public ResponseEntity<EncounterDTO> getEncounterById(@PathVariable Long id) {
-        System.out.println(id + " -----------------------");
+    @GetMapping("/doctor/{social}")
+    public ResponseEntity<DoctorDTO> getEncounterById(@PathVariable String socialNr) {
+        /*System.out.println(socialNr + " -----------------------");
         try {
-            EncounterDTO encounterDTO = encounterService.findById(id);
-            return ResponseEntity.ok(encounterDTO);
+            DoctorDTO doctorDTO = doctorService.getBySocial(socialNr);
+            return ResponseEntity.ok(doctorDTO);
         } catch (EntityNotFoundException ex) {
             return ResponseEntity.notFound().build();
-        }
+        }*/
+        return null;
     }
 
 }

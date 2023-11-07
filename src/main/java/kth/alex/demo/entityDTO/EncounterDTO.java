@@ -7,19 +7,37 @@ import java.time.LocalDateTime;
 
 public class EncounterDTO {
     private Long id;
-    private Patient patient;
-    private Doctor createdBy;
+    private String patientName;
+    private String doctorName;
     private String description;
     private LocalDateTime createdAt;
 
     public EncounterDTO(){
     }
-    public EncounterDTO(Long id, Patient patient, Doctor createdBy, String description, LocalDateTime createdAt) {
+
+    public EncounterDTO(Long id, String patientName, String doctorName, String description, LocalDateTime createdAt) {
         this.id = id;
-        this.patient = patient;
-        this.createdBy = createdBy;
+        this.patientName = patientName;
+        this.doctorName = doctorName;
         this.description = description;
         this.createdAt = createdAt;
+    }
+
+
+    public String getPatientName() {
+        return patientName;
+    }
+
+    public void setPatientName(String patientName) {
+        this.patientName = patientName;
+    }
+
+    public String getDoctorName() {
+        return doctorName;
+    }
+
+    public void setDoctorName(String doctorName) {
+        this.doctorName = doctorName;
     }
 
     public Long getId() {
@@ -28,22 +46,6 @@ public class EncounterDTO {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Patient getPatient() {
-        return patient;
-    }
-
-    public void setPatient(Patient patient) {
-        this.patient = patient;
-    }
-
-    public Doctor getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(Doctor createdBy) {
-        this.createdBy = createdBy;
     }
 
     public String getDescription() {
