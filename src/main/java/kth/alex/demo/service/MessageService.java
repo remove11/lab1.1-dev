@@ -23,8 +23,8 @@ public class MessageService {
             messageDTO.setId(m.getId());
             messageDTO.setContent(m.getContent());
             messageDTO.setCreatedAt(m.getCreatedAt());
-            //messageDTO.setReceiverName("receiver");
-            //messageDTO.setSenderName("sender");
+            messageDTO.setReceiverName("receiver");
+            messageDTO.setSenderName("sender");
 
             messageDTOs.add(messageDTO);
         }

@@ -2,6 +2,9 @@ package kth.alex.demo.entity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import kth.alex.demo.entityDTO.PatientDTO;
+
+import java.security.PublicKey;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -26,36 +29,74 @@ public class Patient extends Person{
         this.createdAt = LocalDateTime.now();
     }
 
-
-    /*
-    public String viewSelfInfo() {
-        StringBuilder info = new StringBuilder();
-
-        info.append("Patient Information:\n");
-        info.append("Name: ").append(getSurename()).append(" ").append(getLastname()).append("\n");
-        info.append("Address: ").append(getAdress()).append("\n");
-        info.append("Phone Number: ").append(getPhoneNr()).append("\n");
-        info.append("Gender: ").append(getGender()).append("\n");
-        info.append("Date Created: ").append(createdAt).append("\n");
-
-        info.append("Observations: ").append(listToString(observations)).append("\n");
-        info.append("Encounters: ").append(listToString(encounters)).append("\n");
-        info.append("Medical Conditions: ").append(listToString(medicalConditions)).append("\n");
-        info.append("Messages: ").append(listToString(messages)).append("\n");
-
-        return info.toString();
+    public Patient(PatientDTO patientDTO){
+        super(
+                patientDTO.surename(),
+                patientDTO.lastname(),
+                patientDTO.adress(),
+                patientDTO.socialNr(),
+                patientDTO.phoneNr(),
+                patientDTO.gender()
+        );
+        this.createdAt = patientDTO.createdAt();
     }
 
-    public void sendMessage(Person recipient, String content) {
-        Message message = new Message();
-        message.setPatient(this);
-        message.setEmployee(recipient);
-        message.setContent(content);
-        //TODO gör anrop till DB för att spara meddelandet
-        System.out.println("Message sent: " + content);
+    public Patient(List<Message> sentMsg, List<Message> receiverMsg, List<MedicalCondition> medicalConditions, List<Encounter> encounter, LocalDateTime createdAt) {
+        this.sentMsg = sentMsg;
+        this.receiverMsg = receiverMsg;
+        this.medicalConditions = medicalConditions;
+        this.encounter = encounter;
+        this.createdAt = createdAt;
     }
 
+    public Patient(String surename, String lastname, String adress, String socialNr, String phoneNr, Gender gender, List<Message> sentMsg, List<Message> receiverMsg, List<MedicalCondition> medicalConditions, List<Encounter> encounter, LocalDateTime createdAt) {
+        super(surename, lastname, adress, socialNr, phoneNr, gender);
+        this.sentMsg = sentMsg;
+        this.receiverMsg = receiverMsg;
+        this.medicalConditions = medicalConditions;
+        this.encounter = encounter;
+        this.createdAt = createdAt;
+    }
 
-    */
+    @Override
+    public List<Message> getSentMsg() {
+        return sentMsg;
+    }
 
+    @Override
+    public void setSentMsg(List<Message> sentMsg) {
+        this.sentMsg = sentMsg;
+    }
+
+    public List<Message> getReceiverMsg() {
+        return receiverMsg;
+    }
+
+    public void setReceiverMsg(List<Message> receiverMsg) {
+        this.receiverMsg = receiverMsg;
+    }
+
+    public List<MedicalCondition> getMedicalConditions() {
+        return medicalConditions;
+    }
+
+    public void setMedicalConditions(List<MedicalCondition> medicalConditions) {
+        this.medicalConditions = medicalConditions;
+    }
+
+    public List<Encounter> getEncounter() {
+        return encounter;
+    }
+
+    public void setEncounter(List<Encounter> encounter) {
+        this.encounter = encounter;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
 }

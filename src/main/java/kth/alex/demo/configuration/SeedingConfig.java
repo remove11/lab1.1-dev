@@ -1,8 +1,11 @@
 package kth.alex.demo.configuration;
 
+import jakarta.transaction.Transactional;
 import kth.alex.demo.entity.*;
+import kth.alex.demo.repository.DoctorRepository;
 import kth.alex.demo.repository.EncounterRepository;
 import kth.alex.demo.repository.MessageRepository;
+import kth.alex.demo.repository.PatientRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,7 +14,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class SeedingConfig {
     @Bean
-    CommandLineRunner commandLineRunner(MessageRepository messageRepository, EncounterRepository encounterRepository){
+    CommandLineRunner commandLineRunner(MessageRepository messageRepository, EncounterRepository encounterRepository, DoctorRepository doctorRepository, PatientRepository patientRepository){
         return arg -> {
             Patient patient = new Patient();
             patient.setAdress("address");
@@ -29,19 +32,20 @@ public class SeedingConfig {
             doctor.setSurename("surename1");
             doctor.setSocialNr("3333334");
 
+
             Message msg = new Message();
             msg.setContent("Du har tid idag");
-            msg.setSender(doctor);
-            msg.setReceiver(patient);
+            msg.setSender(patient);
+            msg.setReceiver(doctor);
 
-            //messageRepository.save(msg);
+            patientRepository.save(patient);
+            doctorRepository.save(doctor);
+            messageRepository.save(msg);
 
             Encounter encounter = new Encounter();
             encounter.setDescription("Jag är encounter");
-            System.out.println("** Pat info is = " + patient.getSocialNr());
-            System.out.println("** doc info is = " + doctor.getSocialNr());
-            encounter.setPatient(patient);
             encounter.setCreatedBy(doctor);
+            encounter.setPatient(patient);
 
             encounterRepository.save(encounter);
         };

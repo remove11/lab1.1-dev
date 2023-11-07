@@ -18,6 +18,14 @@ public abstract class Employee extends Person {
     @OneToMany(mappedBy = "createdBy")
     private List<Encounter> encounter;
 
+    public Employee(String surename, String lastname, String adress, String socialNr, String phoneNr, Gender gender, int employeeId) {
+        super(surename, lastname, adress, socialNr, phoneNr, gender);
+        this.employeeId = employeeId;
+    }
+
+    public Employee() {
+    }
+
     public List<Message> getSentMessages() {
         return sentMessages;
     }

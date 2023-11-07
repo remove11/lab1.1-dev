@@ -21,14 +21,18 @@ public class DoctorService {
 
     public List<DoctorDTO> getAll() {
         List<Doctor> doctors = doctorRepository.findAll();
-
         List<DoctorDTO> doctorDTOs = new ArrayList<>();
         for (Doctor d : doctors) {
-            DoctorDTO doctorDTO = new DoctorDTO();
-
-            doctorDTO.setWritenMedicalCondition(d.getWritenMedicalConditions());
-            doctorDTO.setDegreeId(d.getDegreeId());
-
+            DoctorDTO doctorDTO = new DoctorDTO(
+                    d.getSocialNr(),
+                    d.getSurename(),
+                    d.getLastname(),
+                    d.getAdress(),
+                    d.getPhoneNr(),
+                    d.getGender(),
+                    d.getDegreeId(),
+                    d.getEmployeeId()
+            );
             doctorDTOs.add(doctorDTO);
         }
         return doctorDTOs;
@@ -36,21 +40,37 @@ public class DoctorService {
 
     public List<DoctorDTO> getBySocial(String socialNr) {
         List<Doctor> doctors = doctorRepository.findAll();
-
         List<DoctorDTO> doctorDTOs = new ArrayList<>();
         for (Doctor d : doctors) {
-            DoctorDTO doctorDTO = new DoctorDTO();
-
-            doctorDTO.setWritenMedicalCondition(d.getWritenMedicalConditions());
-            doctorDTO.setDegreeId(d.getDegreeId());
-
-
+            DoctorDTO doctorDTO = new DoctorDTO(
+                    d.getSocialNr(),
+                    d.getSurename(),
+                    d.getLastname(),
+                    d.getAdress(),
+                    d.getPhoneNr(),
+                    d.getGender(),
+                    d.getDegreeId(),
+                    d.getEmployeeId()
+            );
             doctorDTOs.add(doctorDTO);
         }
         return doctorDTOs;
     }
 
+    public DoctorDTO save(DoctorDTO doctorDTO){
+        Doctor doctor = new Doctor(doctorDTO);
+        Doctor d = doctorRepository.save(doctor);
 
-
+        return new DoctorDTO(
+                d.getSocialNr(),
+                d.getSurename(),
+                d.getLastname(),
+                d.getAdress(),
+                d.getPhoneNr(),
+                d.getGender(),
+                d.getDegreeId(),
+                d.getEmployeeId()
+        );
+    }
 }
 

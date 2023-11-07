@@ -20,4 +20,6 @@ class DoctorRepositoryTest {
         System.out.println(doctor.getSurename());
         System.out.println("-----------------------");
     }
+
+
 }
