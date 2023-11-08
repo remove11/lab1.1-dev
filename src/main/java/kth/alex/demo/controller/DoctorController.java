@@ -22,7 +22,7 @@ public class DoctorController {
         return doctorService.getAll();
     }
 
-    @GetMapping("/doctor/{social}")
+    @GetMapping("/doctor/{socialNr}")
     public ResponseEntity<DoctorDTO> getEncounterById(@PathVariable String socialNr) {
         /*System.out.println(socialNr + " -----------------------");
         try {
