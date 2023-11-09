@@ -27,15 +27,13 @@ public class DoctorController {
     }
 
     @GetMapping("/doctor/{socialNr}")
-    public ResponseEntity<DoctorDTO> getEncounterById(@PathVariable String socialNr) {
-        /*System.out.println(socialNr + " -----------------------");
+    public ResponseEntity<DoctorDTO> getDoctorById(@PathVariable String socialNr) {
+        System.out.println(socialNr + " -----------------------");
         try {
             DoctorDTO doctorDTO = doctorService.getBySocial(socialNr);
             return ResponseEntity.ok(doctorDTO);
         } catch (EntityNotFoundException ex) {
             return ResponseEntity.notFound().build();
-        }*/
-        return null;
+        }
     }
-
 }

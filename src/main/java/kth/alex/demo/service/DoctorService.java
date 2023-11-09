@@ -38,23 +38,21 @@ public class DoctorService {
         return doctorDTOs;
     }
 
-    public List<DoctorDTO> getBySocial(String socialNr) {
-        List<Doctor> doctors = doctorRepository.findAll();
-        List<DoctorDTO> doctorDTOs = new ArrayList<>();
-        for (Doctor d : doctors) {
-            DoctorDTO doctorDTO = new DoctorDTO(
-                    d.getSocialNr(),
-                    d.getSurename(),
-                    d.getLastname(),
-                    d.getAdress(),
-                    d.getPhoneNr(),
-                    d.getGender(),
-                    d.getDegreeId(),
-                    d.getEmployeeId()
-            );
-            doctorDTOs.add(doctorDTO);
-        }
-        return doctorDTOs;
+    public DoctorDTO getBySocial(String socialNr) {
+        Doctor d = doctorRepository.findBySocialNr(socialNr);
+
+        DoctorDTO doctorDTO = new DoctorDTO(
+                d.getSocialNr(),
+                d.getSurename(),
+                d.getLastname(),
+                d.getAdress(),
+                d.getPhoneNr(),
+                d.getGender(),
+                d.getDegreeId(),
+                d.getEmployeeId()
+        );
+
+        return doctorDTO;
     }
 
     public DoctorDTO save(DoctorDTO doctorDTO){

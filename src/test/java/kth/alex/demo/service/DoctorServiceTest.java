@@ -22,7 +22,7 @@ class DoctorServiceTest {
                 "112",
                 Person.Gender.OTHER,
                 "0",
-                2
+                "2"
         );
         DoctorDTO d = doctorService.save(doctorDTO);
         System.out.println(d + "+****************");
