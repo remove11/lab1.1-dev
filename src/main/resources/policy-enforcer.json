@@ -1,0 +1,18 @@
+{
+  "realm": "lab1",
+  "auth-server-url": "http://localhost:8081",
+  "resource": "springbootapp",
+  "credentials": {
+    "secret": "uITZJ76V8L90LFdQCjabuVKuG0O8Lcn3"
+  },
+  "paths": [
+    {
+      "path": "/swagger-ui/*",
+      "enforcement-mode": "DISABLED"
+    },
+    {
+      "path": "/v3/api-docs/*",
+      "enforcement-mode": "DISABLED"
+    }
+  ]
+}

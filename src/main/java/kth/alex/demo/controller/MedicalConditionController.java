@@ -1,4 +1,5 @@
 package kth.alex.demo.controller;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.persistence.EntityNotFoundException;
 import kth.alex.demo.entityDTO.MedicalConditionDTO;
 import kth.alex.demo.service.MedicalConditionService;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@SecurityRequirement(name="Keycloak")
 public class MedicalConditionController {
     @Autowired
     private MedicalConditionService medicalConditionService;

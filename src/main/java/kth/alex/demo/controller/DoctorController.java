@@ -1,4 +1,5 @@
 package kth.alex.demo.controller;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.persistence.EntityNotFoundException;
 import kth.alex.demo.entityDTO.DoctorDTO;
 import kth.alex.demo.service.DoctorService;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
+@SecurityRequirement(name="Keycloak")
 public class DoctorController {
     @Autowired
     private DoctorService doctorService;
@@ -22,7 +24,6 @@ public class DoctorController {
 
     @GetMapping("/doctor/{socialNr}")
     public ResponseEntity<DoctorDTO> getDoctorById(@PathVariable String socialNr) {
-        System.out.println(socialNr + " -----------------------");
         try {
             DoctorDTO doctorDTO = doctorService.getBySocial(socialNr);
             return ResponseEntity.ok(doctorDTO);
@@ -30,5 +31,4 @@ public class DoctorController {
             return ResponseEntity.notFound().build();
         }
     }
-
 }
