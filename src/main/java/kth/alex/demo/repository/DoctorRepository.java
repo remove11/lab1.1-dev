@@ -7,5 +7,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface DoctorRepository extends JpaRepository<Doctor, String> {
     Doctor findBySocialNr(String socialNr);
+
+    Doctor findByEmployeeId(String employeeId);
 }
 

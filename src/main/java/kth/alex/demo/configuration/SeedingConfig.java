@@ -8,6 +8,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.UUID;
+
 
 @Configuration
 public class SeedingConfig {
@@ -29,6 +31,8 @@ public class SeedingConfig {
             doctor.setPhoneNr("12322");
             doctor.setSurename("surename1");
             doctor.setSocialNr("3333334");
+            doctor.setEmployeeId("32");
+
 
             OtherPersonal otherPersonal = new OtherPersonal();
             otherPersonal.setAdress("address33");
@@ -37,6 +41,8 @@ public class SeedingConfig {
             otherPersonal.setPhoneNr("333111");
             otherPersonal.setSurename("surename3");
             otherPersonal.setSocialNr("444444");
+            otherPersonal.setEmployeeId(UUID.randomUUID().toString());
+            System.out.println("EmpId= " + otherPersonal.getEmployeeId());
 
 
             Message msg = new Message();

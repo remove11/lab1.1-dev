@@ -2,13 +2,13 @@ package kth.alex.demo.entity;
 import jakarta.persistence.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Employee extends Person {
-
-    @Column(name = "employeeId")
-    private int employeeId;
+    @Column(name = "employeeId", unique = true)
+    private String employeeId;
 
     @OneToMany(mappedBy = "sender")
     private List<Message> sentMessages;
@@ -19,7 +19,7 @@ public abstract class Employee extends Person {
     @OneToMany(mappedBy = "createdBy")
     private List<Encounter> encounter;
 
-    public Employee(String surename, String lastname, String adress, String socialNr, String phoneNr, Gender gender, int employeeId) {
+    public Employee(String surename, String lastname, String adress, String socialNr, String phoneNr, Gender gender, String employeeId) {
         super(surename, lastname, adress, socialNr, phoneNr, gender);
         this.employeeId = employeeId;
     }
@@ -43,11 +43,11 @@ public abstract class Employee extends Person {
         this.receivedMessages = receivedMessages;
     }
 
-    public int getEmployeeId() {
+    public String getEmployeeId() {
         return employeeId;
     }
 
-    public void setEmployeeId(int employeeId) {
+    public void setEmployeeId(String employeeId) {
         this.employeeId = employeeId;
     }
 

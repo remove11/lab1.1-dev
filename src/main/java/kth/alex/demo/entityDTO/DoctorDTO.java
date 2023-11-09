@@ -1,6 +1,8 @@
 package kth.alex.demo.entityDTO;
 import kth.alex.demo.entity.Person;
 
+import java.util.UUID;
+
 
 public record DoctorDTO (
         String socialNr,
@@ -10,7 +12,7 @@ public record DoctorDTO (
         String phoneNr,
         Person.Gender gender,
         String degreeId,
-        int employeeId
+        String employeeId
 
 ){
 }
