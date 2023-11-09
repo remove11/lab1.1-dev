@@ -1,4 +1,5 @@
 package kth.alex.demo.controller;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import kth.alex.demo.entityDTO.MessageDTO;
 import kth.alex.demo.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
+@SecurityRequirement(name="Keycloak")
 public class MessageController {
     @Autowired
     private MessageService messageService;

@@ -1,4 +1,5 @@
 package kth.alex.demo.controller;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import kth.alex.demo.entityDTO.OtherPersonalDTO;
 import kth.alex.demo.service.OtherPersonalService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
+@SecurityRequirement(name="Keycloak")
 public class OtherPersonalController {
     @Autowired
     private OtherPersonalService otherPersonalService;

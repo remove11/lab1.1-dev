@@ -25,8 +25,9 @@ public class JwtAuthConverter implements Converter<Jwt, AbstractAuthenticationTo
     }
 
     private Collection<GrantedAuthority> extractAuthorities(Jwt jwt){
-        if(jwt.getClaim("realm_access") == null)
+        if(jwt.getClaim("realm_access") == null){
             return new ArrayList<>();
+        }
 
         Map<String, Object> realmAccess = jwt.getClaim("realm_access");
         ObjectMapper mapper = new ObjectMapper();
@@ -37,7 +38,7 @@ public class JwtAuthConverter implements Converter<Jwt, AbstractAuthenticationTo
 
         List<GrantedAuthority> roles = new ArrayList<>();
         for(String keycloakRole : keycloakRoles){
-            roles.add(new SimpleGrantedAuthority(keycloakRole));
+            roles.add(new SimpleGrantedAuthority("ROLE_"+keycloakRole));
         }
         return roles;
     }
