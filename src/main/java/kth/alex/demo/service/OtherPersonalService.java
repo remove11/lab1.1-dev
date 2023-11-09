@@ -32,11 +32,11 @@ public class OtherPersonalService {
         return otherPersonalDTOS;
     }
 
-    public List<OtherPersonalDTO> getBySocial(String socialNr) {
-        List<OtherPersonal> otherPersonals = otherPersonalRepository.findAll();
-        List<OtherPersonalDTO> otherPersonalDTOS = new ArrayList<>();
-        for (OtherPersonal o : otherPersonals) {
-            OtherPersonalDTO otherPersonalDTO = new OtherPersonalDTO(
+    public OtherPersonalDTO getBySocial(String socialNr) {
+        OtherPersonal o = otherPersonalRepository.findBySocialNr(socialNr);
+
+
+            return new OtherPersonalDTO(
                     o.getSocialNr(),
                     o.getSurename(),
                     o.getLastname(),
@@ -46,9 +46,7 @@ public class OtherPersonalService {
                     o.getCalenderId(),
                     o.getEmployeeId()
             );
-            otherPersonalDTOS.add(otherPersonalDTO);
-        }
-        return otherPersonalDTOS;
+
     }
 
     public OtherPersonalDTO save(OtherPersonalDTO otherPersonalDTO){

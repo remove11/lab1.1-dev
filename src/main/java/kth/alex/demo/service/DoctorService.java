@@ -1,12 +1,7 @@
 package kth.alex.demo.service;
-
-import jakarta.persistence.EntityNotFoundException;
 import kth.alex.demo.entity.Doctor;
-import kth.alex.demo.entity.Encounter;
 import kth.alex.demo.entityDTO.DoctorDTO;
-import kth.alex.demo.entityDTO.EncounterDTO;
 import kth.alex.demo.repository.DoctorRepository;
-import kth.alex.demo.repository.EncounterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -39,9 +34,9 @@ public class DoctorService {
     }
 
     public DoctorDTO getBySocial(String socialNr) {
+        System.out.println("Här är i service social=" + socialNr);
         Doctor d = doctorRepository.findBySocialNr(socialNr);
-
-        DoctorDTO doctorDTO = new DoctorDTO(
+        return new DoctorDTO(
                 d.getSocialNr(),
                 d.getSurename(),
                 d.getLastname(),
@@ -51,8 +46,6 @@ public class DoctorService {
                 d.getDegreeId(),
                 d.getEmployeeId()
         );
-
-        return doctorDTO;
     }
 
     public DoctorDTO save(DoctorDTO doctorDTO){

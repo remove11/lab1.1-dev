@@ -1,9 +1,6 @@
 package kth.alex.demo.entityDTO;
 import kth.alex.demo.entity.Person;
 
-import java.util.UUID;
-
-
 public record DoctorDTO (
         String socialNr,
         String surename,
