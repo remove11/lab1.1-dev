@@ -1,4 +1,5 @@
 package kth.alex.demo.controller;
+import jakarta.persistence.EntityNotFoundException;
 import kth.alex.demo.entityDTO.OtherPersonalDTO;
 import kth.alex.demo.service.OtherPersonalService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,16 +20,15 @@ public class OtherPersonalController {
         return otherPersonalService.getAll();
     }
 
-    @GetMapping("/otherPersonal/{social}")
+    @GetMapping("/otherPersonal/{socialNr}")
     public ResponseEntity<OtherPersonalDTO> getEncounterById(@PathVariable String socialNr) {
-        /*System.out.println(socialNr + " -----------------------");
+        System.out.println(socialNr + " -----------------------");
         try {
-            DoctorDTO doctorDTO = doctorService.getBySocial(socialNr);
-            return ResponseEntity.ok(doctorDTO);
+            OtherPersonalDTO otherPersonalDTO = otherPersonalService.getBySocial(socialNr);
+            return ResponseEntity.ok(otherPersonalDTO);
         } catch (EntityNotFoundException ex) {
             return ResponseEntity.notFound().build();
-        }*/
-        return null;
+        }
     }
 
 }
