@@ -28,7 +28,6 @@ public class DoctorController {
 
     @GetMapping("/doctor/{socialNr}")
     public ResponseEntity<DoctorDTO> getDoctorById(@PathVariable String socialNr) {
-        System.out.println(socialNr + " -----------------------");
         try {
             DoctorDTO doctorDTO = doctorService.getBySocial(socialNr);
             return ResponseEntity.ok(doctorDTO);
