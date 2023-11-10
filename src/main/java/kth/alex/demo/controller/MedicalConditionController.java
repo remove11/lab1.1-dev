@@ -1,6 +1,7 @@
 package kth.alex.demo.controller;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.persistence.EntityNotFoundException;
+import kth.alex.demo.RequestBodyData.MedicalConditionCreate;
 import kth.alex.demo.entityDTO.MedicalConditionDTO;
 import kth.alex.demo.service.MedicalConditionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,7 @@ public class MedicalConditionController {
     }
 
     @GetMapping("/medicalCondition/{id}")
-    public ResponseEntity<MedicalConditionDTO> getMedicalConditionById(@PathVariable Long id) {
+    public ResponseEntity<MedicalConditionDTO> getMedicalConditionById(@PathVariable String id) {
         System.out.println(id + " -----------------------");
         try {
             MedicalConditionDTO medicalConditionDTO = medicalConditionService.findById(id);
@@ -31,8 +32,14 @@ public class MedicalConditionController {
         }
     }
     @PostMapping("/medicalCondition")
-    public MedicalConditionDTO create(@RequestBody MedicalConditionDTO medicalConditionDTO){
-        medicalConditionService.create(medicalConditionDTO);
-        return medicalConditionDTO;
+    public ResponseEntity<String> create(@RequestBody MedicalConditionCreate medicalConditionCreate){
+        try{
+            medicalConditionService.create(medicalConditionCreate);
+            return ResponseEntity.ok("Entity added");
+        }catch (EntityNotFoundException ex){
+            return ResponseEntity.notFound().build();
+        }catch (Exception ex){
+            return ResponseEntity.internalServerError().body("Something gone wrong");
+        }
     }
 }

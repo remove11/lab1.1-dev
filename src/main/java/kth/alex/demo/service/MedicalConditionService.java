@@ -2,6 +2,7 @@ package kth.alex.demo.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import kth.alex.demo.RequestBodyData.MedicalConditionCreate;
 import kth.alex.demo.entity.Doctor;
 import kth.alex.demo.entity.MedicalCondition;
 import kth.alex.demo.entity.Patient;
@@ -22,10 +23,8 @@ public class MedicalConditionService {
     @Autowired
     private MedicalConditionRepository medicalConditionRepository;
     @Autowired
-
     PatientRepository patientRepository;
     @Autowired
-
     DoctorRepository doctorRepository;
 
     public List<MedicalConditionDTO> getAll() {
@@ -42,11 +41,12 @@ public class MedicalConditionService {
         }
         return medicalConditionDTOS;
     }
-    public MedicalConditionDTO findById(Long id) {
+    public MedicalConditionDTO findById(String id) {
         return medicalConditionRepository.findById(id)
                 .map(m -> {
                     MedicalConditionDTO medicalConditionDTO = new MedicalConditionDTO();
                     medicalConditionDTO.setId(m.getId());
+
                     medicalConditionDTO.setDoctorEmployeeId(m.getDoctor().getEmployeeId());
                     medicalConditionDTO.setPatientSocialNr(m.getPatient().getSocialNr());
                     medicalConditionDTO.setDiagnos(m.getDiagnos());
@@ -57,16 +57,15 @@ public class MedicalConditionService {
     }
 
     @Transactional
-    public void create(MedicalConditionDTO medicalConditionDTO){
+    public void create(MedicalConditionCreate medicalConditionCreate){
         MedicalCondition medicalCondition = new MedicalCondition();
 
-        Patient patient = patientRepository.findBySocialNr(medicalConditionDTO.getPatientSocialNr());
-        Doctor doctor = doctorRepository.findByEmployeeId(medicalConditionDTO.getDoctorEmployeeId());
+        Patient patient = patientRepository.findBySocialNr(medicalConditionCreate.getPatientSocialNr());
+        Doctor doctor = doctorRepository.findByEmployeeId(medicalConditionCreate.getDoctorEmployeeId());
 
         medicalCondition.setPatient(patient);
         medicalCondition.setDoctor(doctor);
-        medicalCondition.setDiagnos(medicalConditionDTO.getDiagnos());
-        medicalCondition.setCreatedAt(medicalConditionDTO.getCreatedAt());
+        medicalCondition.setDiagnos(medicalConditionCreate.getDiagnos());
 
         medicalConditionRepository.save(medicalCondition);
     }

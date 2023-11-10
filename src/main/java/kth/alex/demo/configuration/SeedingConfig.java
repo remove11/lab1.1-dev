@@ -52,10 +52,15 @@ public class SeedingConfig {
 
 
 
+            System.out.println("YOYOYOY1");
             otherPersonalRepository.save(otherPersonal);
+            System.out.println("YOYOYOY2");
             patientRepository.save(patient);
+            System.out.println("YOYOYOY3");
             doctorRepository.save(doctor);
+            System.out.println("YOYOYOY4");
             messageRepository.save(msg);
+            System.out.println("YOYOYOY5");
 
             Encounter encounter = new Encounter();
             encounter.setDescription("Jag är encounter");
@@ -69,6 +74,7 @@ public class SeedingConfig {
             medicalCondition.setPatient(patient);
             medicalCondition.setDiagnos("Väldigt sjukt tyvärr");
 
+            System.out.println("YOYOYOY6");
             medicalConditionRepository.save(medicalCondition);
 
             Observation observation = new Observation();
@@ -78,6 +84,7 @@ public class SeedingConfig {
 
             observationRepository.save(observation);
 
+            System.out.println("YOYOYOY7");
 
         };
     }

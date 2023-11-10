@@ -8,8 +8,8 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface EncounterRepository extends JpaRepository<Encounter, Long> {
+public interface EncounterRepository extends JpaRepository<Encounter, String> {
     @Query("select e from Encounter e join fetch e.patient join fetch e.createdBy where e.id = ?1")
-    public Optional<Encounter> findById(Long id);
+    public Optional<Encounter> findById(String id);
 }
 

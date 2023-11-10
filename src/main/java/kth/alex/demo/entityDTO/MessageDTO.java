@@ -1,62 +1,23 @@
 package kth.alex.demo.entityDTO;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.time.LocalDateTime;
 
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
+@Getter
 public class MessageDTO {
-    private Long id;
+    private String id;
     private String senderName;
+    private String senderSocialNr;
     private String receiverName;
+    private String receiverSocialNr;
     private String content;
     private LocalDateTime createdAt;
 
-    public MessageDTO() {
-    }
-
-    public MessageDTO(Long id, String senderName, String receiverName, String content, LocalDateTime createdAt) {
-        this.id = id;
-        this.senderName = senderName;
-        this.receiverName = receiverName;
-        this.content = content;
-        this.createdAt = createdAt;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getSenderName() {
-        return senderName;
-    }
-
-    public String getReceiverName() {
-        return receiverName;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setSenderName(String senderName) {
-        this.senderName = senderName;
-    }
-
-    public void setReceiverName(String receiverName) {
-        this.receiverName = receiverName;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
 }

@@ -24,6 +24,11 @@ public abstract class Employee extends Person {
         this.employeeId = employeeId;
     }
 
+    public Employee(String surename, String lastname, String adress, String socialNr, String phoneNr, Gender gender) {
+        super(surename, lastname, adress, socialNr, phoneNr, gender);
+        this.employeeId = UUID.randomUUID().toString();
+    }
+
     public Employee() {
     }
 

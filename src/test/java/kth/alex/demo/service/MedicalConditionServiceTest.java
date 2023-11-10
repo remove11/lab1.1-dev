@@ -1,5 +1,6 @@
 package kth.alex.demo.service;
 
+import kth.alex.demo.RequestBodyData.MedicalConditionCreate;
 import kth.alex.demo.entityDTO.MedicalConditionDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,14 +13,10 @@ class MedicalConditionServiceTest {
 
     @Test
     void create() {
-        MedicalConditionDTO medicalConditionDTO = new MedicalConditionDTO(
-                2L,
+        MedicalConditionCreate medicalConditionDTO = new MedicalConditionCreate(
                 "122233",
-                "surename",
                 "32",
-                "surename1",
-                "Riktigt Sjuk",
-                LocalDateTime.now()
+                "Riktigt Sjuk"
         );
         medicalConditionService.create(medicalConditionDTO);
     }
