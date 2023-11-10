@@ -10,6 +10,5 @@ public record DoctorDTO (
         Person.Gender gender,
         String degreeId,
         String employeeId
-
 ){
 }

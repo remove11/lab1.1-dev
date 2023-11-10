@@ -18,5 +18,4 @@ public class EncounterDTO {
     private String doctorName;
     private String description;
     private LocalDateTime createdAt;
-
 }
