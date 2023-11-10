@@ -41,7 +41,6 @@ public class DoctorService {
     }
 
     public DoctorDTO getBySocial(String socialNr) {
-        System.out.println("Här är i service social=" + socialNr);
         Doctor d = doctorRepository.findBySocialNr(socialNr);
         return new DoctorDTO(
                 d.getSocialNr(),

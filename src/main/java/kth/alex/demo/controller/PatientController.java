@@ -2,8 +2,8 @@ package kth.alex.demo.controller;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.persistence.EntityNotFoundException;
 import kth.alex.demo.RequestBodyData.UserCreationRequest;
-import kth.alex.demo.entityDTO.OtherPersonalDTO;
-import kth.alex.demo.service.OtherPersonalService;
+import kth.alex.demo.entityDTO.PatientDTO;
+import kth.alex.demo.service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,29 +12,29 @@ import java.util.List;
 
 @RestController
 @SecurityRequirement(name="Keycloak")
-public class OtherPersonalController {
+public class PatientController {
     @Autowired
-    private OtherPersonalService otherPersonalService;
+    private PatientService patientService;
 
-    @GetMapping("/otherPersonal")
-    public List<OtherPersonalDTO> sayHello() {
-        return otherPersonalService.getAll();
+    @GetMapping("/patient")
+    public List<PatientDTO> sayHello() {
+        return patientService.getAll();
     }
 
-    @GetMapping("/otherPersonal/{socialNr}")
-    public ResponseEntity<OtherPersonalDTO> getOtherById(@PathVariable String socialNr) {
+    @GetMapping("/patient/{socialNr}")
+    public ResponseEntity<PatientDTO> getOtherById(@PathVariable String socialNr) {
         System.out.println(socialNr + " -----------------------");
         try {
-            OtherPersonalDTO otherPersonalDTO = otherPersonalService.getBySocial(socialNr);
-            return ResponseEntity.ok(otherPersonalDTO);
+            PatientDTO patientDTO = patientService.getBySocial(socialNr);
+            return ResponseEntity.ok(patientDTO);
         } catch (EntityNotFoundException ex) {
             return ResponseEntity.notFound().build();
         }
     }
-    @PostMapping("/otherPersonal")
+    @PostMapping("/patient")
     public ResponseEntity<String> create(@RequestBody UserCreationRequest userCreationRequest){
         try{
-            otherPersonalService.save(userCreationRequest);
+            patientService.save(userCreationRequest);
             return ResponseEntity.ok("Doctor created");
         }catch (Exception ex){
             return ResponseEntity.notFound().build();

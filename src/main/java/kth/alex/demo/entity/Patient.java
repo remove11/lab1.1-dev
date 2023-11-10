@@ -2,6 +2,7 @@ package kth.alex.demo.entity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import kth.alex.demo.RequestBodyData.UserCreationRequest;
 import kth.alex.demo.entityDTO.PatientDTO;
 import lombok.Getter;
 import lombok.Setter;
@@ -43,6 +44,18 @@ public class Patient extends Person{
                 patientDTO.getPhoneNr(),
                 patientDTO.getGender(),
                 patientDTO.getKeycloakId()
+        );
+        this.createdAt = patientDTO.getCreatedAt();
+    }
+
+    public Patient(UserCreationRequest patientDTO){
+        super(
+                patientDTO.getSurename(),
+                patientDTO.getLastname(),
+                patientDTO.getAdress(),
+                patientDTO.getSocialNr(),
+                patientDTO.getPhoneNr(),
+                patientDTO.getGender()
         );
         this.createdAt = patientDTO.getCreatedAt();
     }

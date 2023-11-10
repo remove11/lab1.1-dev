@@ -1,11 +1,14 @@
 package kth.alex.demo.service;
 
+import kth.alex.demo.RequestBodyData.UserCreationRequest;
 import kth.alex.demo.entity.Doctor;
 import kth.alex.demo.entity.Patient;
 import kth.alex.demo.entityDTO.DoctorDTO;
 import kth.alex.demo.entityDTO.PatientDTO;
 import kth.alex.demo.repository.DoctorRepository;
+import kth.alex.demo.repository.KeycloakRepository;
 import kth.alex.demo.repository.PatientRepository;
+import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +19,9 @@ import java.util.List;
 public class PatientService {
     @Autowired
     private PatientRepository patientRepository;
+
+    @Autowired
+    private KeycloakRepository keycloakRepository;
 
     public List<PatientDTO> getAll() {
         List<Patient> patients = patientRepository.findAll();
@@ -37,12 +43,9 @@ public class PatientService {
         return patientDTOs;
     }
 
-    public List<PatientDTO> getBySocial(String socialNr) {
-        List<Patient> patients = patientRepository.findAll();
-
-        List<PatientDTO> patientDTOs = new ArrayList<>();
-        for (Patient p : patients) {
-            PatientDTO patientDTO = new PatientDTO(
+    public PatientDTO getBySocial(String socialNr) {
+        Patient p = patientRepository.findBySocialNr(socialNr);
+            return new PatientDTO(
                     p.getSocialNr(),
                     p.getSurename(),
                     p.getLastname(),
@@ -52,14 +55,16 @@ public class PatientService {
                     p.getKeycloakId(),
                     p.getCreatedAt()
             );
-
-            patientDTOs.add(patientDTO);
-        }
-        return patientDTOs;
     }
 
-    public PatientDTO save(PatientDTO patientDTO){
+    public PatientDTO save(UserCreationRequest patientDTO){
         Patient patient = new Patient(patientDTO);
+
+        keycloakRepository.createUser(patientDTO).orElseThrow();
+        UserRepresentation u = keycloakRepository.getUserByEmail(patientDTO.getEmail()).orElseThrow();
+
+        patient.setKeycloakId(u.getId());
+
         Patient p = patientRepository.save(patient);
         return new PatientDTO(
                 p.getSocialNr(),

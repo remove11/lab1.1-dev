@@ -24,4 +24,5 @@ public class UserCreationRequest {
     private String employeeId;
     private String degreeId;
     private String type;
+    private String getCalenderId;
 }

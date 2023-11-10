@@ -1,7 +1,11 @@
 package kth.alex.demo.service;
+import kth.alex.demo.RequestBodyData.UserCreationRequest;
 import kth.alex.demo.entity.OtherPersonal;
 import kth.alex.demo.entityDTO.OtherPersonalDTO;
+import kth.alex.demo.repository.KeycloakRepository;
 import kth.alex.demo.repository.OtherPersonalRepository;
+import org.apache.catalina.User;
+import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +16,9 @@ import java.util.List;
 public class OtherPersonalService {
     @Autowired
     private OtherPersonalRepository otherPersonalRepository;
+
+    @Autowired
+    private KeycloakRepository keycloakRepository;
 
     public List<OtherPersonalDTO> getAll() {
         List<OtherPersonal> otherPersonals = otherPersonalRepository.findAll();
@@ -34,8 +41,6 @@ public class OtherPersonalService {
 
     public OtherPersonalDTO getBySocial(String socialNr) {
         OtherPersonal o = otherPersonalRepository.findBySocialNr(socialNr);
-
-
             return new OtherPersonalDTO(
                     o.getSocialNr(),
                     o.getSurename(),
@@ -49,8 +54,12 @@ public class OtherPersonalService {
 
     }
 
-    public OtherPersonalDTO save(OtherPersonalDTO otherPersonalDTO){
-        OtherPersonal otherPersonal = new OtherPersonal(otherPersonalDTO);
+    public OtherPersonalDTO save(UserCreationRequest otherPersonalCreation){
+        OtherPersonal otherPersonal = new OtherPersonal(otherPersonalCreation);
+
+        UserRepresentation user = keycloakRepository.createUser(otherPersonalCreation).orElseThrow();
+
+        otherPersonal.setKeycloakId(user.getId());
         OtherPersonal o = otherPersonalRepository.save(otherPersonal);
 
         return new OtherPersonalDTO(

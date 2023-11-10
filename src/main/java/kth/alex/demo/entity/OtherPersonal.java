@@ -1,6 +1,7 @@
 package kth.alex.demo.entity;
 
 import jakarta.persistence.*;
+import kth.alex.demo.RequestBodyData.UserCreationRequest;
 import kth.alex.demo.entityDTO.OtherPersonalDTO;
 import lombok.Getter;
 import lombok.Setter;
@@ -38,5 +39,18 @@ public class OtherPersonal extends Employee{
                 otherPersonalDTO.getEmployeeId()
         );
         this.calenderId=otherPersonalDTO.getCalenderId();
+    }
+
+    public OtherPersonal(UserCreationRequest otherPersonalDTO){
+        super(
+                otherPersonalDTO.getSurename(),
+                otherPersonalDTO.getLastname(),
+                otherPersonalDTO.getAdress(),
+                otherPersonalDTO.getSocialNr(),
+                otherPersonalDTO.getPhoneNr(),
+                otherPersonalDTO.getGender(),
+                otherPersonalDTO.getEmployeeId()
+        );
+        this.calenderId= otherPersonalDTO.getGetCalenderId();
     }
 }

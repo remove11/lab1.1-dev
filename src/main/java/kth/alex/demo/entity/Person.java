@@ -62,4 +62,13 @@ public abstract class Person {
         this.gender = gender;
         this.keycloakId = keycloakId;
     }
+
+    public Person(String surename, String lastname, String adress, String socialNr, String phoneNr, Gender gender) {
+        this.surename = surename;
+        this.lastname = lastname;
+        this.adress = adress;
+        this.socialNr = socialNr;
+        this.phoneNr = phoneNr;
+        this.gender = gender;
+    }
 }

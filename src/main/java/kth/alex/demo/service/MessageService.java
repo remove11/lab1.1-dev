@@ -55,12 +55,13 @@ public class MessageService {
     }
 
     @Transactional
-    public void create(MessageCreate messageCreate){
+    public void create(MessageCreate messageCreate) throws Exception {
         Message message = new Message();
+        message.setContent(messageCreate.getDescription());
 
-        String senderId = identityRepository.getUserId().orElseThrow();
+        String keycloakId = identityRepository.getUserId().orElseThrow();
 
-        Person sender = personRepository.findBySocialNr(senderId);
+        Person sender = personRepository.findByKeycloakId(keycloakId);
         Person reciver = personRepository.findBySocialNr(messageCreate.getReceiverSocialNr());
 
         message.setSender(sender);
