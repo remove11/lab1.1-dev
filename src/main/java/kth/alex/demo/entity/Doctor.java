@@ -32,14 +32,14 @@ public class Doctor extends Employee{
 
     public Doctor(DoctorDTO doctorDTO){
         super(
-                doctorDTO.surename(),
-                doctorDTO.lastname(),
-                doctorDTO.adress(),
-                doctorDTO.socialNr(),
-                doctorDTO.phoneNr(),
-                doctorDTO.gender(),
-                doctorDTO.employeeId()
+                doctorDTO.getSurename(),
+                doctorDTO.getLastname(),
+                doctorDTO.getAdress(),
+                doctorDTO.getSocialNr(),
+                doctorDTO.getPhoneNr(),
+                doctorDTO.getGender(),
+                doctorDTO.getEmployeeId()
         );
-        this.degreeId=doctorDTO.degreeId();
+        this.degreeId=doctorDTO.getDegreeId();
     }
 }

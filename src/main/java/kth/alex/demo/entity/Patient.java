@@ -36,14 +36,14 @@ public class Patient extends Person{
 
     public Patient(PatientDTO patientDTO){
         super(
-                patientDTO.surename(),
-                patientDTO.lastname(),
-                patientDTO.adress(),
-                patientDTO.socialNr(),
-                patientDTO.phoneNr(),
-                patientDTO.gender()
+                patientDTO.getSurename(),
+                patientDTO.getLastname(),
+                patientDTO.getAdress(),
+                patientDTO.getSocialNr(),
+                patientDTO.getPhoneNr(),
+                patientDTO.getGender()
         );
-        this.createdAt = patientDTO.createdAt();
+        this.createdAt = patientDTO.getCreatedAt();
     }
 
     public Patient(String surename, String lastname, String adress, String socialNr, String phoneNr, Gender gender, LocalDateTime createdAt) {

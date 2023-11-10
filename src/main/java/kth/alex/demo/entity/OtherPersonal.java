@@ -32,14 +32,14 @@ public class OtherPersonal extends Employee{
 
     public OtherPersonal(OtherPersonalDTO otherPersonalDTO){
         super(
-                otherPersonalDTO.surename(),
-                otherPersonalDTO.lastname(),
-                otherPersonalDTO.adress(),
-                otherPersonalDTO.socialNr(),
-                otherPersonalDTO.phoneNr(),
-                otherPersonalDTO.gender(),
-                otherPersonalDTO.employeeId()
+                otherPersonalDTO.getSurename(),
+                otherPersonalDTO.getLastname(),
+                otherPersonalDTO.getAdress(),
+                otherPersonalDTO.getSocialNr(),
+                otherPersonalDTO.getPhoneNr(),
+                otherPersonalDTO.getGender(),
+                otherPersonalDTO.getEmployeeId()
         );
-        this.calenderId=otherPersonalDTO.calenderId();
+        this.calenderId=otherPersonalDTO.getCalenderId();
     }
 }
