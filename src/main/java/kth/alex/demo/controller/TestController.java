@@ -1,7 +1,7 @@
 package kth.alex.demo.controller;
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import kth.alex.demo.service.IdentityService;
+import kth.alex.demo.repository.IdentityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -15,7 +15,7 @@ import java.util.Map;
 @SecurityRequirement(name="Keycloak")
 public class TestController {
     @Autowired
-    IdentityService identityService;
+    IdentityRepository identityRepository;
 
 
     @GetMapping("/headers")
@@ -59,11 +59,11 @@ public class TestController {
 
     @GetMapping("/service/id")
     public String getSub(){
-        return identityService.getUserId(SecurityContextHolder.getContext()).orElse("id not found");
+        return identityRepository.getUserId().orElse("id not found");
     }
 
     @GetMapping("/service/hasrole/{role}")
     public Boolean hasrole(@PathVariable String role){
-        return identityService.hasRole(role);
+        return identityRepository.hasRole(role);
     }
 }

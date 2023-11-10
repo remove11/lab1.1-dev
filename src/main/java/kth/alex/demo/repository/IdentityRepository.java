@@ -1,18 +1,18 @@
-package kth.alex.demo.service;
+package kth.alex.demo.repository;
+
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 
 import java.util.*;
 
-@Service
-public class IdentityService {
+@Repository
+public class IdentityRepository {
 
-    public Optional<String> getUserId(SecurityContext context){
+    public Optional<String> getUserId(){
         Jwt jwt;
 
         try{
