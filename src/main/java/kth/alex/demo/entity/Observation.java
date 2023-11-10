@@ -5,6 +5,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -23,6 +24,10 @@ public class Observation {
     @ManyToOne()
     @JoinColumn(name="employeeId", nullable = false)
     private Doctor createdBy;
+
+    @ManyToOne()
+    @JoinColumn(name = "observationId", nullable = false)
+    private Encounter encounter;
 
     @Column(name = "description")
     private String description;

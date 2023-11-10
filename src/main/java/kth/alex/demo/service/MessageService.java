@@ -1,7 +1,6 @@
 package kth.alex.demo.service;
 import jakarta.persistence.EntityNotFoundException;
 import kth.alex.demo.entity.*;
-import kth.alex.demo.entityDTO.MedicalConditionDTO;
 import kth.alex.demo.entityDTO.MessageDTO;
 import kth.alex.demo.repository.DoctorRepository;
 import kth.alex.demo.repository.MessageRepository;
@@ -27,7 +26,6 @@ public class MessageService {
         List<MessageDTO> messageDTOs = new ArrayList<>();
         for (Message m : messages) {
             MessageDTO messageDTO = new MessageDTO();
-
             messageDTO.setId(m.getId());
             messageDTO.setContent(m.getContent());
             messageDTO.setCreatedAt(m.getCreatedAt());
@@ -43,7 +41,6 @@ public class MessageService {
                 .map(m -> {
                     MessageDTO messageDTO = new MessageDTO();
                     messageDTO.setId(m.getId());
-                    System.out.println("*************");
                     messageDTO.setSenderSocialNr(m.getSender().getSocialNr());
                     messageDTO.setReceiverSocialNr(m.getReceiver().getSocialNr());
                     messageDTO.setContent(m.getContent());

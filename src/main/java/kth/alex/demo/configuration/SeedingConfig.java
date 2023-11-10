@@ -77,14 +77,18 @@ public class SeedingConfig {
             System.out.println("YOYOYOY6");
             medicalConditionRepository.save(medicalCondition);
 
+
+            System.out.println("YOYOYOY7");
+
             Observation observation = new Observation();
             observation.setCreatedBy(doctor);
             observation.setPatient(patient);
+            observation.setEncounter(encounter);
             observation.setDescription("Lite galen");
 
             observationRepository.save(observation);
+            System.out.println("YOYOYOY8");
 
-            System.out.println("YOYOYOY7");
 
         };
     }

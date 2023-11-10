@@ -23,7 +23,7 @@ public abstract class Employee extends Person {
     private List<Message> receivedMessages;
 
     @OneToMany(mappedBy = "createdBy")
-    private List<Encounter> encounter;
+    private List<Encounter> createdEncounter;
 
     public Employee(String surename, String lastname, String adress, String socialNr, String phoneNr, Gender gender, String employeeId) {
         super(surename, lastname, adress, socialNr, phoneNr, gender);

@@ -16,9 +16,6 @@ import java.util.UUID;
 @ToString
 public class OtherPersonal extends Employee{
 
-    @OneToMany(mappedBy = "patient")
-    private List<MedicalCondition> writenMedicalConditions;
-
     @Column(name = "calenderId")
     String calenderId;
 

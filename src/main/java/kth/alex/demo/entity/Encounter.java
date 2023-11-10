@@ -5,6 +5,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -22,10 +23,12 @@ public class Encounter {
 
     @ManyToOne()
     @JoinColumn(name="employeeId", nullable = false)
-    private Doctor createdBy;
+    private Employee createdBy;
 
     @Column(name = "description")
     private String description;
+    @OneToMany(mappedBy = "encounter")
+    private List<Observation> observations;
 
     @Column(name = "createdAt")
     private LocalDateTime createdAt;

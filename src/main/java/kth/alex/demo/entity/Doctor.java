@@ -18,6 +18,9 @@ public class Doctor extends Employee{
     @OneToMany(mappedBy = "patient")
     private List<MedicalCondition> writenMedicalConditions;
 
+    @OneToMany(mappedBy = "createdBy")
+    private List<Observation> writenObservations;
+
     @Column(name = "degreeId")
     String degreeId;
 
