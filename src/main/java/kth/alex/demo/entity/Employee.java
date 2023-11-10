@@ -1,11 +1,17 @@
 package kth.alex.demo.entity;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.util.List;
 import java.util.UUID;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
+@Getter
+@Setter
+@ToString
 public abstract class Employee extends Person {
     @Column(name = "employeeId", unique = true)
     private String employeeId;
@@ -30,38 +36,6 @@ public abstract class Employee extends Person {
     }
 
     public Employee() {
-    }
-
-    public List<Message> getSentMessages() {
-        return sentMessages;
-    }
-
-    public void setSentMessages(List<Message> sentMessages) {
-        this.sentMessages = sentMessages;
-    }
-
-    public List<Message> getReceivedMessages() {
-        return receivedMessages;
-    }
-
-    public void setReceivedMessages(List<Message> receivedMessages) {
-        this.receivedMessages = receivedMessages;
-    }
-
-    public String getEmployeeId() {
-        return employeeId;
-    }
-
-    public void setEmployeeId(String employeeId) {
-        this.employeeId = employeeId;
-    }
-
-    @Override
-    public String toString() {
-        return "Employee{" +
-                "employeeId=" + employeeId +
-                ", sentMessages=" + sentMessages +
-                ", receivedMessages=" + receivedMessages +
-                '}';
+        this.employeeId = UUID.randomUUID().toString();
     }
 }

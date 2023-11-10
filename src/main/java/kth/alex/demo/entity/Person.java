@@ -1,12 +1,18 @@
 package kth.alex.demo.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.util.List;
 
 
 @Inheritance(strategy = InheritanceType.JOINED)
 @Entity
+@Getter
+@Setter
+@ToString
 public abstract class Person {
 
     public enum Gender {
@@ -40,26 +46,6 @@ public abstract class Person {
     @OneToMany(mappedBy = "receiver")
     private List<Message> receivedMsg;
 
-    public void setSocialNr(String socialNr) {
-        this.socialNr = socialNr;
-    }
-
-    public void setSentMsg(List<Message> sentMsg) {
-        this.sentMsg = sentMsg;
-    }
-
-    public void setReceivedMsg(List<Message> receivedMsg) {
-        this.receivedMsg = receivedMsg;
-    }
-
-    public List<Message> getSentMsg() {
-        return sentMsg;
-    }
-
-    public List<Message> getReceivedMsg() {
-        return receivedMsg;
-    }
-
     public Person() {
     }
 
@@ -70,61 +56,5 @@ public abstract class Person {
         this.socialNr = socialNr;
         this.phoneNr = phoneNr;
         this.gender = gender;
-    }
-
-    public String getSurename() {
-        return surename;
-    }
-
-    public void setSurename(String surename) {
-        this.surename = surename;
-    }
-
-    public String getLastname() {
-        return lastname;
-    }
-
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
-    }
-
-    public String getAdress() {
-        return adress;
-    }
-
-    public void setAdress(String adress) {
-        this.adress = adress;
-    }
-
-    public String getSocialNr() {
-        return socialNr;
-    }
-
-    public String getPhoneNr() {
-        return phoneNr;
-    }
-
-    public void setPhoneNr(String phoneNr) {
-        this.phoneNr = phoneNr;
-    }
-
-    public Gender getGender() {
-        return gender;
-    }
-
-    public void setGender(Gender gender) {
-        this.gender = gender;
-    }
-
-    @Override
-    public String toString() {
-        return "Person{" +
-                "surename='" + surename + '\'' +
-                ", lastname='" + lastname + '\'' +
-                ", adress='" + adress + '\'' +
-                ", socialNr='" + socialNr + '\'' +
-                ", phoneNr='" + phoneNr + '\'' +
-                ", gender=" + gender +
-                '}';
     }
 }

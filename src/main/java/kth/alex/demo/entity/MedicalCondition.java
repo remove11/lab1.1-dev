@@ -1,10 +1,17 @@
 package kth.alex.demo.entity;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
 @Table(name = "medicalcondition")
+@Getter
+@Setter
+@ToString
 public class MedicalCondition {
     @Id
     private String id;
@@ -24,48 +31,13 @@ public class MedicalCondition {
     private LocalDateTime createdAt;
 
     public MedicalCondition() {
-        super();
         this.createdAt = LocalDateTime.now();
         this.id = UUID.randomUUID().toString();
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public Doctor getDoctor() {
-        return doctor;
-    }
-
-    public void setDoctor(Doctor doctor) {
-        this.doctor = doctor;
-    }
-
-    public Patient getPatient() {
-        return patient;
-    }
-
-    public void setPatient(Patient patient) {
-        this.patient = patient;
-    }
-
-    public String getDiagnos() {
-        return diagnos;
-    }
-
-    public void setDiagnos(String diagnos) {
+    public MedicalCondition(String diagnos) {
+        this.createdAt = LocalDateTime.now();
+        this.id = UUID.randomUUID().toString();
         this.diagnos = diagnos;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
     }
 }

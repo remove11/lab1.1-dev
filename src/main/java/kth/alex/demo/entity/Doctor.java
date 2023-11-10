@@ -1,12 +1,18 @@
 package kth.alex.demo.entity;
 import jakarta.persistence.*;
 import kth.alex.demo.entityDTO.DoctorDTO;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.util.List;
 
 
 @Entity
 @Table(name = "doctor")
+@Getter
+@Setter
+@ToString
 public class Doctor extends Employee{
 
     @OneToMany(mappedBy = "patient")
@@ -17,6 +23,11 @@ public class Doctor extends Employee{
 
     public Doctor() {
         super();
+    }
+
+    public Doctor(String surename, String lastname, String adress, String socialNr, String phoneNr, Gender gender, String employeeId, String degreeId) {
+        super(surename, lastname, adress, socialNr, phoneNr, gender, employeeId);
+        this.degreeId = degreeId;
     }
 
     public Doctor(DoctorDTO doctorDTO){
@@ -30,21 +41,5 @@ public class Doctor extends Employee{
                 doctorDTO.employeeId()
         );
         this.degreeId=doctorDTO.degreeId();
-    }
-
-    public List<MedicalCondition> getWritenMedicalConditions() {
-        return writenMedicalConditions;
-    }
-
-    public void setWritenMedicalConditions(List<MedicalCondition> writenMedicalConditions) {
-        this.writenMedicalConditions = writenMedicalConditions;
-    }
-
-    public String getDegreeId() {
-        return degreeId;
-    }
-
-    public void setDegreeId(String degreeId) {
-        this.degreeId = degreeId;
     }
 }

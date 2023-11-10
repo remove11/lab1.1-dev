@@ -2,11 +2,18 @@ package kth.alex.demo.entity;
 
 import jakarta.persistence.*;
 import kth.alex.demo.entityDTO.OtherPersonalDTO;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table(name = "otherPersonal")
+@Getter
+@Setter
+@ToString
 public class OtherPersonal extends Employee{
 
     @OneToMany(mappedBy = "patient")
@@ -16,7 +23,11 @@ public class OtherPersonal extends Employee{
     String calenderId;
 
     public OtherPersonal() {
-        super();
+        this.calenderId = UUID.randomUUID().toString();
+    }
+
+    public OtherPersonal(String calenderId) {
+        this.calenderId = calenderId;
     }
 
     public OtherPersonal(OtherPersonalDTO otherPersonalDTO){
@@ -30,21 +41,5 @@ public class OtherPersonal extends Employee{
                 otherPersonalDTO.employeeId()
         );
         this.calenderId=otherPersonalDTO.calenderId();
-    }
-
-    public List<MedicalCondition> getWritenMedicalConditions() {
-        return writenMedicalConditions;
-    }
-
-    public void setWritenMedicalConditions(List<MedicalCondition> writenMedicalConditions) {
-        this.writenMedicalConditions = writenMedicalConditions;
-    }
-
-    public String getCalenderId() {
-        return calenderId;
-    }
-
-    public void setCalenderId(String calenderId) {
-        this.calenderId = calenderId;
     }
 }

@@ -3,6 +3,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import kth.alex.demo.entityDTO.PatientDTO;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.security.PublicKey;
 import java.time.LocalDateTime;
@@ -10,8 +13,10 @@ import java.util.List;
 
 @Entity
 @Table(name = "patient")
+@Getter
+@Setter
+@ToString
 public class Patient extends Person{
-
     @OneToMany(mappedBy = "sender")
     private List<Message> sentMsg;
     @OneToMany(mappedBy = "receiver")
@@ -41,62 +46,8 @@ public class Patient extends Person{
         this.createdAt = patientDTO.createdAt();
     }
 
-    public Patient(List<Message> sentMsg, List<Message> receiverMsg, List<MedicalCondition> medicalConditions, List<Encounter> encounter, LocalDateTime createdAt) {
-        this.sentMsg = sentMsg;
-        this.receiverMsg = receiverMsg;
-        this.medicalConditions = medicalConditions;
-        this.encounter = encounter;
-        this.createdAt = createdAt;
-    }
-
-    public Patient(String surename, String lastname, String adress, String socialNr, String phoneNr, Gender gender, List<Message> sentMsg, List<Message> receiverMsg, List<MedicalCondition> medicalConditions, List<Encounter> encounter, LocalDateTime createdAt) {
+    public Patient(String surename, String lastname, String adress, String socialNr, String phoneNr, Gender gender, LocalDateTime createdAt) {
         super(surename, lastname, adress, socialNr, phoneNr, gender);
-        this.sentMsg = sentMsg;
-        this.receiverMsg = receiverMsg;
-        this.medicalConditions = medicalConditions;
-        this.encounter = encounter;
-        this.createdAt = createdAt;
-    }
-
-    @Override
-    public List<Message> getSentMsg() {
-        return sentMsg;
-    }
-
-    @Override
-    public void setSentMsg(List<Message> sentMsg) {
-        this.sentMsg = sentMsg;
-    }
-
-    public List<Message> getReceiverMsg() {
-        return receiverMsg;
-    }
-
-    public void setReceiverMsg(List<Message> receiverMsg) {
-        this.receiverMsg = receiverMsg;
-    }
-
-    public List<MedicalCondition> getMedicalConditions() {
-        return medicalConditions;
-    }
-
-    public void setMedicalConditions(List<MedicalCondition> medicalConditions) {
-        this.medicalConditions = medicalConditions;
-    }
-
-    public List<Encounter> getEncounter() {
-        return encounter;
-    }
-
-    public void setEncounter(List<Encounter> encounter) {
-        this.encounter = encounter;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 }
