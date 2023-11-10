@@ -1,7 +1,7 @@
 package kth.alex.demo.repository;
 
 import jakarta.ws.rs.core.Response;
-import kth.alex.demo.requestBodyEntity.UserCreationRequest;
+import kth.alex.demo.RequestBodyData.UserCreationRequest;
 import kth.alex.demo.utils.KeycloakUtil;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.representations.idm.CredentialRepresentation;

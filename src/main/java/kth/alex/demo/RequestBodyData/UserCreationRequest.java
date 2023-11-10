@@ -1,4 +1,4 @@
-package kth.alex.demo.requestBodyEntity;
+package kth.alex.demo.RequestBodyData;
 
 import kth.alex.demo.entity.Person;
 import lombok.*;

@@ -1,7 +1,7 @@
 package kth.alex.demo.repository;
 
 import kth.alex.demo.entity.Person;
-import kth.alex.demo.requestBodyEntity.UserCreationRequest;
+import kth.alex.demo.RequestBodyData.UserCreationRequest;
 import org.junit.jupiter.api.Test;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.beans.factory.annotation.Autowired;
