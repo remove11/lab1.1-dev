@@ -1,12 +1,13 @@
 package kth.alex.demo.entity;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.UUID;
+
 @Entity
 @Table(name = "message")
 public class Message {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
     @ManyToOne()
     @JoinColumn(name="sender_id", nullable = false)
     private Person sender;
@@ -21,9 +22,10 @@ public class Message {
     public Message() {
         super();
         this.createdAt = LocalDateTime.now();
+        this.id = UUID.randomUUID().toString();
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -39,7 +41,7 @@ public class Message {
         this.createdAt = createdAt;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 

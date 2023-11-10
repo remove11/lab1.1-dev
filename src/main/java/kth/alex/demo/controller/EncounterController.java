@@ -25,14 +25,17 @@ public class EncounterController {
     }
 
     @GetMapping("/encounter/{id}")
-    public ResponseEntity<EncounterDTO> getEncounterById(@PathVariable Long id) {
+    public ResponseEntity<EncounterDTO> getEncounterById(@PathVariable String id) {
         System.out.println(id + " -----------------------");
         try {
             EncounterDTO encounterDTO = encounterService.findById(id);
             return ResponseEntity.ok(encounterDTO);
         } catch (EntityNotFoundException ex) {
             return ResponseEntity.notFound().build();
+        }catch (Exception ex){
+            ResponseEntity.internalServerError().body("ex");
+            return null;
         }
     }
-
 }
+

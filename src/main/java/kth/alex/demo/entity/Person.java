@@ -22,6 +22,8 @@ public abstract class Person {
     @Column(name = "adress")
     private String adress;
 
+    @Column(name="id", unique = true)
+    private String userCredential;
     @Id
     @Column(name = "socialNr")
     private String socialNr;

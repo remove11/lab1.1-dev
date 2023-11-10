@@ -35,7 +35,7 @@ public class ObservationService {
 
 
 
-    public ObservationDTO findById(Long id) {
+    public ObservationDTO findById(String id) {
         return observationRepository.findById(id)
                 .map(e -> {
                     ObservationDTO observationDTO = new ObservationDTO();

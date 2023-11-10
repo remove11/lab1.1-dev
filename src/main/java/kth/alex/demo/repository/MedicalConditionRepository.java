@@ -13,6 +13,6 @@ import java.util.Optional;
 @Repository
 public interface MedicalConditionRepository extends JpaRepository<MedicalCondition, Long> {
     @Query("select m from MedicalCondition m join fetch m.patient join fetch m.doctor where m.id = ?1")
-    public Optional<MedicalCondition> findById(Long id);
+    public Optional<MedicalCondition> findById(String id);
 }
 

@@ -1,13 +1,13 @@
 package kth.alex.demo.entity;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Table(name = "medicalcondition")
 public class MedicalCondition {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
     @ManyToOne()
     @JoinColumn(name = "doctor_id", nullable = false)
@@ -26,13 +26,14 @@ public class MedicalCondition {
     public MedicalCondition() {
         super();
         this.createdAt = LocalDateTime.now();
+        this.id = UUID.randomUUID().toString();
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

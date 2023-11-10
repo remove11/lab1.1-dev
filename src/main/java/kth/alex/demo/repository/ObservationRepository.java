@@ -10,6 +10,6 @@ import java.util.Optional;
 @Repository
 public interface ObservationRepository extends JpaRepository<Observation, Long> {
     @Query("select e from Observation e join fetch e.patient join fetch e.createdBy where e.id = ?1")
-    public Optional<Observation> findById(Long id);
+    public Optional<Observation> findById(String id);
 }
 

@@ -24,7 +24,7 @@ public class ObservationController {
     }
 
     @GetMapping("/observation/{id}")
-    public ResponseEntity<ObservationDTO> getObservationsById(@PathVariable Long id) {
+    public ResponseEntity<ObservationDTO> getObservationsById(@PathVariable String id) {
         System.out.println(id + " -----------------------");
         try {
             ObservationDTO observationDTO = observationService.findById(id);
