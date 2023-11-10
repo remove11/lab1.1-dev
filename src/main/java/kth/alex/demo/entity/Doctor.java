@@ -1,5 +1,6 @@
 package kth.alex.demo.entity;
 import jakarta.persistence.*;
+import kth.alex.demo.RequestBodyData.UserCreationRequest;
 import kth.alex.demo.entityDTO.DoctorDTO;
 import lombok.Getter;
 import lombok.Setter;
@@ -44,5 +45,18 @@ public class Doctor extends Employee{
                 doctorDTO.getEmployeeId()
         );
         this.degreeId=doctorDTO.getDegreeId();
+    }
+
+    public Doctor(UserCreationRequest doctorCreate){
+        super(
+                doctorCreate.getSurename(),
+                doctorCreate.getLastname(),
+                doctorCreate.getAdress(),
+                doctorCreate.getSocialNr(),
+                doctorCreate.getPhoneNr(),
+                doctorCreate.getGender(),
+                doctorCreate.getEmployeeId()
+        );
+        this.degreeId=doctorCreate.getDegreeId();
     }
 }

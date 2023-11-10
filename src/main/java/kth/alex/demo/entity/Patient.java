@@ -41,13 +41,14 @@ public class Patient extends Person{
                 patientDTO.getAdress(),
                 patientDTO.getSocialNr(),
                 patientDTO.getPhoneNr(),
-                patientDTO.getGender()
+                patientDTO.getGender(),
+                patientDTO.getKeycloakId()
         );
         this.createdAt = patientDTO.getCreatedAt();
     }
 
-    public Patient(String surename, String lastname, String adress, String socialNr, String phoneNr, Gender gender, LocalDateTime createdAt) {
-        super(surename, lastname, adress, socialNr, phoneNr, gender);
+    public Patient(String surename, String lastname, String adress, String socialNr, String phoneNr, Gender gender, LocalDateTime createdAt, String keycloakId) {
+        super(surename, lastname, adress, socialNr, phoneNr, gender, keycloakId);
         this.createdAt = createdAt;
     }
 }

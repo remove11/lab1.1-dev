@@ -23,6 +23,7 @@ class PatientServiceTest {
                 "Borta",
                 "911",
                 Person.Gender.OTHER,
+                "fdsf",
                 LocalDateTime.now().minusYears(23)
         );
         PatientDTO p = patientService.save(patientDTO);

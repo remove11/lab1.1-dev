@@ -1,14 +1,13 @@
 package kth.alex.demo.controller;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.persistence.EntityNotFoundException;
+import kth.alex.demo.RequestBodyData.MessageCreate;
 import kth.alex.demo.entityDTO.MedicalConditionDTO;
 import kth.alex.demo.entityDTO.MessageDTO;
 import kth.alex.demo.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -31,6 +30,16 @@ public class MessageController {
             return ResponseEntity.ok(messageDTO);
         } catch (EntityNotFoundException ex) {
             return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PostMapping("/message")
+    public ResponseEntity<String> create(@RequestBody MessageCreate messageCreate){
+        try{
+            messageService.create(messageCreate);
+            return ResponseEntity.ok("Message sent");
+        }catch (Exception ex){
+            return ResponseEntity.badRequest().build();
         }
     }
 }

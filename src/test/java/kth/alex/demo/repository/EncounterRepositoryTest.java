@@ -14,7 +14,7 @@ class EncounterRepositoryTest {
 
     @Test
     public void findByIdTest(){
-        Encounter encounter = encounterRepository.findById(1L).orElse(null);
+        Encounter encounter = encounterRepository.findById("1L").orElse(null);
 
         System.out.println("--------------------------");
             System.out.println(encounter.getDescription());

@@ -25,13 +25,13 @@ public abstract class Employee extends Person {
     @OneToMany(mappedBy = "createdBy")
     private List<Encounter> createdEncounter;
 
-    public Employee(String surename, String lastname, String adress, String socialNr, String phoneNr, Gender gender, String employeeId) {
-        super(surename, lastname, adress, socialNr, phoneNr, gender);
+    public Employee(String surename, String lastname, String adress, String socialNr, String phoneNr, Gender gender, String employeeId, String keycloakId) {
+        super(surename, lastname, adress, socialNr, phoneNr, gender, keycloakId);
         this.employeeId = employeeId;
     }
 
-    public Employee(String surename, String lastname, String adress, String socialNr, String phoneNr, Gender gender) {
-        super(surename, lastname, adress, socialNr, phoneNr, gender);
+    public Employee(String surename, String lastname, String adress, String socialNr, String phoneNr, Gender gender, String keycloakId) {
+        super(surename, lastname, adress, socialNr, phoneNr, gender, keycloakId);
         this.employeeId = UUID.randomUUID().toString();
     }
 

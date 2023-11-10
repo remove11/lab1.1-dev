@@ -25,6 +25,9 @@ public abstract class Person {
     @Column(name = "lastname")
     private String lastname;
 
+    @Column(name = "keycloakId")
+    private String keycloakId;
+
     @Column(name = "adress")
     private String adress;
 
@@ -46,15 +49,17 @@ public abstract class Person {
     @OneToMany(mappedBy = "receiver")
     private List<Message> receivedMsg;
 
+
     public Person() {
     }
 
-    public Person(String surename, String lastname, String adress, String socialNr, String phoneNr, Gender gender) {
+    public Person(String surename, String lastname, String adress, String socialNr, String phoneNr, Gender gender, String keycloakId) {
         this.surename = surename;
         this.lastname = lastname;
         this.adress = adress;
         this.socialNr = socialNr;
         this.phoneNr = phoneNr;
         this.gender = gender;
+        this.keycloakId = keycloakId;
     }
 }

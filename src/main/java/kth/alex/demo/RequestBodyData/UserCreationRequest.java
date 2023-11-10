@@ -22,5 +22,6 @@ public class UserCreationRequest {
     private Person.Gender gender;
     private LocalDateTime createdAt;
     private String employeeId;
-    String degreeId;
+    private String degreeId;
+    private String type;
 }

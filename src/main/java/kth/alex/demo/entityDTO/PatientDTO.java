@@ -26,6 +26,7 @@ public class PatientDTO {
     String adress;
     String phoneNr;
     Person.Gender gender;
+    String keycloakId;
     LocalDateTime createdAt;
 }
 

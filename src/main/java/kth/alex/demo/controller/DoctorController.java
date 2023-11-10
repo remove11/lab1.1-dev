@@ -1,13 +1,12 @@
 package kth.alex.demo.controller;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.persistence.EntityNotFoundException;
+import kth.alex.demo.RequestBodyData.UserCreationRequest;
 import kth.alex.demo.entityDTO.DoctorDTO;
 import kth.alex.demo.service.DoctorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -31,4 +30,15 @@ public class DoctorController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @PostMapping("/doctor")
+    public ResponseEntity<String> create(@RequestBody UserCreationRequest userCreationRequest){
+        try{
+            doctorService.save(userCreationRequest);
+            return ResponseEntity.ok("Doctor created");
+        }catch (Exception ex){
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 }

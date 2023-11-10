@@ -29,6 +29,7 @@ public class PatientService {
                     p.getAdress(),
                     p.getPhoneNr(),
                     p.getGender(),
+                    p.getKeycloakId(),
                     p.getCreatedAt()
             );
             patientDTOs.add(patientDTO);
@@ -48,6 +49,7 @@ public class PatientService {
                     p.getAdress(),
                     p.getPhoneNr(),
                     p.getGender(),
+                    p.getKeycloakId(),
                     p.getCreatedAt()
             );
 
@@ -66,6 +68,7 @@ public class PatientService {
                 p.getAdress(),
                 p.getPhoneNr(),
                 p.getGender(),
+                p.getKeycloakId(),
                 p.getCreatedAt()
         );
     }

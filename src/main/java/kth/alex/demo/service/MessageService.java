@@ -1,10 +1,11 @@
 package kth.alex.demo.service;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
+import kth.alex.demo.RequestBodyData.MedicalConditionCreate;
+import kth.alex.demo.RequestBodyData.MessageCreate;
 import kth.alex.demo.entity.*;
 import kth.alex.demo.entityDTO.MessageDTO;
-import kth.alex.demo.repository.DoctorRepository;
-import kth.alex.demo.repository.MessageRepository;
-import kth.alex.demo.repository.PatientRepository;
+import kth.alex.demo.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,9 +17,10 @@ public class MessageService {
     @Autowired
     private MessageRepository messageRepository;
     @Autowired
-    PatientRepository patientRepository;
+    PersonRepository personRepository;
+
     @Autowired
-    DoctorRepository doctorRepository;
+    IdentityRepository identityRepository;
 
     public List<MessageDTO> getAll() {
         List<Message> messages = messageRepository.findAll();
@@ -40,14 +42,33 @@ public class MessageService {
         return messageRepository.findById(id)
                 .map(m -> {
                     MessageDTO messageDTO = new MessageDTO();
+
                     messageDTO.setId(m.getId());
                     messageDTO.setSenderSocialNr(m.getSender().getSocialNr());
                     messageDTO.setReceiverSocialNr(m.getReceiver().getSocialNr());
                     messageDTO.setContent(m.getContent());
                     messageDTO.setCreatedAt(m.getCreatedAt());
+
                     return messageDTO;
                 })
                 .orElseThrow(() -> new EntityNotFoundException("Encounter not found with id " + id));
     }
+
+    @Transactional
+    public void create(MessageCreate messageCreate){
+        Message message = new Message();
+
+        String senderId = identityRepository.getUserId().orElseThrow();
+
+        Person sender = personRepository.findBySocialNr(senderId);
+        Person reciver = personRepository.findBySocialNr(messageCreate.getReceiverSocialNr());
+
+        message.setSender(sender);
+        message.setReceiver(reciver);
+        message.setContent(message.getContent());
+
+        messageRepository.save(message);
+    }
+
 }
 
