@@ -2,6 +2,8 @@ package kth.alex.demo.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import kth.alex.demo.Exeption.NotFoundException;
+import kth.alex.demo.Exeption.ServerErrorException;
 import kth.alex.demo.RequestBodyData.MedicalConditionCreate;
 import kth.alex.demo.entity.Doctor;
 import kth.alex.demo.entity.MedicalCondition;
@@ -27,8 +29,14 @@ public class MedicalConditionService {
     @Autowired
     DoctorRepository doctorRepository;
 
-    public List<MedicalConditionDTO> getAll() {
-        List<MedicalCondition> medicalConditions = medicalConditionRepository.findAll();
+    public List<MedicalConditionDTO> getAll() throws ServerErrorException {
+        List<MedicalCondition> medicalConditions;
+
+        try {
+            medicalConditions = medicalConditionRepository.findAll();
+        }catch (Exception ex){
+            throw new ServerErrorException(ex.getMessage());
+        }
 
         List<MedicalConditionDTO> medicalConditionDTOS = new ArrayList<>();
         for (MedicalCondition m : medicalConditions) {
@@ -36,24 +44,25 @@ public class MedicalConditionService {
             medicalConditionDTO.setId(m.getId());
             medicalConditionDTO.setDiagnos(m.getDiagnos());
             medicalConditionDTO.setCreatedAt(m.getCreatedAt());
-
             medicalConditionDTOS.add(medicalConditionDTO);
         }
         return medicalConditionDTOS;
     }
-    public MedicalConditionDTO findById(String id) {
-        return medicalConditionRepository.findById(id)
-                .map(m -> {
-                    MedicalConditionDTO medicalConditionDTO = new MedicalConditionDTO();
-                    medicalConditionDTO.setId(m.getId());
+    public MedicalConditionDTO findById(String id) throws NotFoundException {
 
-                    medicalConditionDTO.setDoctorEmployeeId(m.getDoctor().getEmployeeId());
-                    medicalConditionDTO.setPatientSocialNr(m.getPatient().getSocialNr());
-                    medicalConditionDTO.setDiagnos(m.getDiagnos());
-                    medicalConditionDTO.setCreatedAt(m.getCreatedAt());
-                    return medicalConditionDTO;
-                })
-                .orElseThrow(() -> new EntityNotFoundException("Encounter not found with id " + id));
+        MedicalCondition m = medicalConditionRepository
+                .findById(id)
+                .orElseThrow(() -> new NotFoundException("Medical Condition not found"));
+
+        MedicalConditionDTO medicalConditionDTO = new MedicalConditionDTO();
+        medicalConditionDTO.setId(m.getId());
+
+        medicalConditionDTO.setDoctorEmployeeId(m.getDoctor().getEmployeeId());
+        medicalConditionDTO.setPatientSocialNr(m.getPatient().getSocialNr());
+        medicalConditionDTO.setDiagnos(m.getDiagnos());
+        medicalConditionDTO.setCreatedAt(m.getCreatedAt());
+
+        return medicalConditionDTO;
     }
 
     @Transactional

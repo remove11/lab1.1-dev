@@ -1,6 +1,8 @@
 package kth.alex.demo.controller;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.persistence.EntityNotFoundException;
+import kth.alex.demo.Exeption.NotFoundException;
+import kth.alex.demo.Exeption.ServerErrorException;
 import kth.alex.demo.RequestBodyData.UserCreationRequest;
 import kth.alex.demo.entityDTO.OtherPersonalDTO;
 import kth.alex.demo.service.OtherPersonalService;
@@ -17,7 +19,7 @@ public class OtherPersonalController {
     private OtherPersonalService otherPersonalService;
 
     @GetMapping("/otherPersonal")
-    public List<OtherPersonalDTO> sayHello() {
+    public List<OtherPersonalDTO> sayHello() throws NotFoundException, ServerErrorException {
         return otherPersonalService.getAll();
     }
 
@@ -27,8 +29,8 @@ public class OtherPersonalController {
         try {
             OtherPersonalDTO otherPersonalDTO = otherPersonalService.getBySocial(socialNr);
             return ResponseEntity.ok(otherPersonalDTO);
-        } catch (EntityNotFoundException ex) {
-            return ResponseEntity.notFound().build();
+        } catch (NotFoundException | ServerErrorException e) {
+            throw new RuntimeException(e);
         }
     }
     @PostMapping("/otherPersonal")
