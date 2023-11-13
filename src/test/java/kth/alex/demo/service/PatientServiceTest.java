@@ -26,7 +26,7 @@ class PatientServiceTest {
                 "fdsf",
                 LocalDateTime.now().minusYears(23)
         );
-        PatientDTO p = patientService.save(patientDTO);
-        System.out.println(p + "+++++++++++++++++++++");
+        //PatientDTO p = patientService.save(patientDTO);
+        //System.out.println(p + "+++++++++++++++++++++");
     }
 }

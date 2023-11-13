@@ -8,6 +8,7 @@ import kth.alex.demo.entityDTO.PatientDTO;
 import kth.alex.demo.service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,13 +20,14 @@ public class PatientController {
     private PatientService patientService;
 
     @GetMapping("/patient")
+    @PreAuthorize("hasRole('doctor') || hasRole('otherPersonal')")
     public List<PatientDTO> sayHello() throws ServerErrorException {
         return patientService.getAll();
     }
 
     @GetMapping("/patient/{socialNr}")
+    @PreAuthorize("hasRole('doctor') || hasRole('otherPersonal')")
     public ResponseEntity<PatientDTO> getOtherById(@PathVariable String socialNr) {
-        System.out.println(socialNr + " -----------------------");
         try {
             PatientDTO patientDTO = patientService.getBySocial(socialNr);
             return ResponseEntity.ok(patientDTO);
@@ -34,6 +36,7 @@ public class PatientController {
         }
     }
     @PostMapping("/patient")
+    @PreAuthorize("hasRole('doctor') || hasRole('otherPersonal')")
     public ResponseEntity<String> create(@RequestBody UserCreationRequest userCreationRequest){
         try{
             patientService.save(userCreationRequest);

@@ -4,9 +4,11 @@ import jakarta.persistence.EntityNotFoundException;
 import kth.alex.demo.RequestBodyData.EncounterCreate;
 import kth.alex.demo.Exeption.ServerErrorException;
 import kth.alex.demo.entityDTO.EncounterDTO;
+import kth.alex.demo.repository.IdentityRepository;
 import kth.alex.demo.service.EncounterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,14 +19,22 @@ public class EncounterController {
     @Autowired
     private EncounterService encounterService;
 
+    @Autowired
+    private IdentityRepository identityRepository;
+
     @GetMapping("/encounter")
+    @PreAuthorize("hasRole('doctor')")
     public List<EncounterDTO> sayHello() throws ServerErrorException {
         return encounterService.getAll();
     }
 
     @GetMapping("/encounter/{id}")
     public ResponseEntity<EncounterDTO> getEncounterById(@PathVariable String id) {
-        System.out.println(id + " -----------------------");
+
+        if(identityRepository.hasRole("patient") && !identityRepository.getUserId().equals(id) && !identityRepository.hasRole("doctor")){
+            return ResponseEntity.status(403).build();
+        }
+
         try {
             EncounterDTO encounterDTO = encounterService.findById(id);
             return ResponseEntity.ok(encounterDTO);
@@ -37,6 +47,7 @@ public class EncounterController {
     }
 
     @PostMapping("/encounter")
+    @PreAuthorize("hasRole('doctor') || hasRole('otherPersonal')")
     public ResponseEntity<String> create(@RequestBody EncounterCreate encounterCreate){
         try{
             encounterService.create(encounterCreate);

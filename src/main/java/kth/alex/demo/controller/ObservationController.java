@@ -5,9 +5,11 @@ import kth.alex.demo.RequestBodyData.ObservationCreate;
 import kth.alex.demo.Exeption.NotFoundException;
 import kth.alex.demo.Exeption.ServerErrorException;
 import kth.alex.demo.entityDTO.ObservationDTO;
+import kth.alex.demo.repository.IdentityRepository;
 import kth.alex.demo.service.ObservationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,15 +19,20 @@ import java.util.List;
 public class ObservationController {
     @Autowired
     private ObservationService observationService;
+    @Autowired
+    private IdentityRepository identityRepository;
 
     @GetMapping("/observation")
+    @PreAuthorize("hasRole('doctor')")
     public List<ObservationDTO> sayHello() throws ServerErrorException {
         return observationService.getAll();
     }
 
     @GetMapping("/observation/{id}")
     public ResponseEntity<ObservationDTO> getObservationsById(@PathVariable String id) {
-        System.out.println(id + " -----------------------");
+        if(identityRepository.hasRole("patient") && !identityRepository.getUserId().equals(id) && !identityRepository.hasRole("doctor")){
+            return ResponseEntity.status(403).build();
+        }
         try {
             ObservationDTO observationDTO = observationService.findById(id);
             return ResponseEntity.ok(observationDTO);
@@ -34,6 +41,7 @@ public class ObservationController {
         }
     }
     @PostMapping("/observation")
+    @PreAuthorize("hasRole('doctor') || hasRole('otherPersonal')")
     public ResponseEntity<String> create(@RequestBody ObservationCreate observationCreate){
         try{
             observationService.create(observationCreate);

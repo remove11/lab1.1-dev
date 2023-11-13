@@ -60,6 +60,24 @@ public class MessageService {
         return messageDTO;
     }
 
+    public List<MessageDTO> findListById(String id) throws NotFoundException {
+        List<MessageDTO> messageDTOs = new ArrayList<>();
+        List<Message> messages = messageRepository.findListById(id);
+
+        for (Message m : messages) {
+            messageDTOs.add(new MessageDTO(
+                    m.getId(),
+                    m.getSender().getSurename(),
+                    m.getSender().getSocialNr(),
+                    m.getReceiver().getSurename(),
+                    m.getReceiver().getSocialNr(),
+                    m.getContent(),
+                    m.getCreatedAt()));
+        }
+
+        return messageDTOs;
+    }
+
     @Transactional
     public void create(MessageCreate messageCreate) throws ServerErrorException, NotFoundException {
         Message message = new Message();

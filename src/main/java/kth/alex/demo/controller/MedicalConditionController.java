@@ -5,9 +5,11 @@ import kth.alex.demo.Exeption.NotFoundException;
 import kth.alex.demo.Exeption.ServerErrorException;
 import kth.alex.demo.RequestBodyData.MedicalConditionCreate;
 import kth.alex.demo.entityDTO.MedicalConditionDTO;
+import kth.alex.demo.repository.IdentityRepository;
 import kth.alex.demo.service.MedicalConditionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,15 +19,20 @@ import java.util.List;
 public class MedicalConditionController {
     @Autowired
     private MedicalConditionService medicalConditionService;
+    @Autowired
+    private IdentityRepository identityRepository;
 
     @GetMapping("/medicalCondition")
+    @PreAuthorize("hasRole('doctor')")
     public List<MedicalConditionDTO> sayHello() throws ServerErrorException {
         return medicalConditionService.getAll();
     }
 
     @GetMapping("/medicalCondition/{id}")
     public ResponseEntity<MedicalConditionDTO> getMedicalConditionById(@PathVariable String id) {
-        System.out.println(id + " -----------------------");
+        if(identityRepository.hasRole("patient") && !identityRepository.getUserId().equals(id) && !identityRepository.hasRole("doctor")){
+            return ResponseEntity.status(403).build();
+        }
         try {
             MedicalConditionDTO medicalConditionDTO = medicalConditionService.findById(id);
             return ResponseEntity.ok(medicalConditionDTO);
@@ -36,6 +43,7 @@ public class MedicalConditionController {
         }
     }
     @PostMapping("/medicalCondition")
+    @PreAuthorize("hasRole('doctor')")
     public ResponseEntity<String> create(@RequestBody MedicalConditionCreate medicalConditionCreate){
         try{
             medicalConditionService.create(medicalConditionCreate);

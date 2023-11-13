@@ -1,5 +1,7 @@
 package kth.alex.demo.service;
 
+import kth.alex.demo.Exeption.NotFoundException;
+import kth.alex.demo.Exeption.ServerErrorException;
 import kth.alex.demo.RequestBodyData.MessageCreate;
 import kth.alex.demo.entity.Doctor;
 import kth.alex.demo.entity.Message;
@@ -21,7 +23,7 @@ class MessageServiceTest {
     @Autowired
     DoctorRepository doctorRepository;
     @Test
-    void create() {
+    void create() throws NotFoundException, ServerErrorException {
 
         Patient patient = new Patient();
         patient.setAdress("address1");
