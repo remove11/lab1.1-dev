@@ -35,7 +35,7 @@ public class PatientController {
     public ResponseEntity<String> create(@RequestBody UserCreationRequest userCreationRequest){
         try{
             patientService.save(userCreationRequest);
-            return ResponseEntity.ok("Doctor created");
+            return ResponseEntity.ok("Patient created");
         }catch (Exception ex){
             return ResponseEntity.notFound().build();
         }

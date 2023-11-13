@@ -1,11 +1,7 @@
 package kth.alex.demo.service;
-
 import kth.alex.demo.RequestBodyData.UserCreationRequest;
-import kth.alex.demo.entity.Doctor;
 import kth.alex.demo.entity.Patient;
-import kth.alex.demo.entityDTO.DoctorDTO;
 import kth.alex.demo.entityDTO.PatientDTO;
-import kth.alex.demo.repository.DoctorRepository;
 import kth.alex.demo.repository.KeycloakRepository;
 import kth.alex.demo.repository.PatientRepository;
 import org.keycloak.representations.idm.UserRepresentation;

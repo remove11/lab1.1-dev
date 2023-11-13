@@ -13,7 +13,10 @@ import java.time.LocalDateTime;
 public class ObservationDTO {
     private String id;
     private String patientName;
+    private String patientSocialNr;
     private String doctorName;
+    private String doctorEmployeeId;
     private String description;
+    private String encounterId;
     private LocalDateTime createdAt;
 }

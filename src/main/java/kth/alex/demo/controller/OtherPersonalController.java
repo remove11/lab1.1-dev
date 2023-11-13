@@ -35,7 +35,7 @@ public class OtherPersonalController {
     public ResponseEntity<String> create(@RequestBody UserCreationRequest userCreationRequest){
         try{
             otherPersonalService.save(userCreationRequest);
-            return ResponseEntity.ok("Doctor created");
+            return ResponseEntity.ok("OtherPersonal created");
         }catch (Exception ex){
             return ResponseEntity.notFound().build();
         }

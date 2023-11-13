@@ -35,7 +35,7 @@ public class MedicalConditionController {
     public ResponseEntity<String> create(@RequestBody MedicalConditionCreate medicalConditionCreate){
         try{
             medicalConditionService.create(medicalConditionCreate);
-            return ResponseEntity.ok("Entity added");
+            return ResponseEntity.ok("MedicalCondition added");
         }catch (EntityNotFoundException ex){
             return ResponseEntity.notFound().build();
         }catch (Exception ex){

@@ -7,6 +7,7 @@ import kth.alex.demo.entity.*;
 import kth.alex.demo.entityDTO.MessageDTO;
 import kth.alex.demo.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -51,7 +52,7 @@ public class MessageService {
 
                     return messageDTO;
                 })
-                .orElseThrow(() -> new EntityNotFoundException("Encounter not found with id " + id));
+                .orElseThrow(() -> new EntityNotFoundException("Message not found with id " + id));
     }
 
     @Transactional
@@ -60,12 +61,23 @@ public class MessageService {
         message.setContent(messageCreate.getDescription());
 
         String keycloakId = identityRepository.getUserId().orElseThrow();
-
+        System.out.println(keycloakId + " = KEYID**************"); //finns
         Person sender = personRepository.findByKeycloakId(keycloakId);
-        Person reciver = personRepository.findBySocialNr(messageCreate.getReceiverSocialNr());
+        Person receiver = personRepository.findBySocialNr(messageCreate.getReceiverSocialNr());
+        // Har ingen sender här när jag kör via Swagger
+
+        if (sender == null) {
+            System.out.println("Sender is null");
+        }
+        if (receiver == null) {
+            System.out.println("Receiver is null");
+        }
+        if (message.getContent() == null) {
+            System.out.println("Message content is null");
+        }
 
         message.setSender(sender);
-        message.setReceiver(reciver);
+        message.setReceiver(receiver);
         message.setContent(message.getContent());
 
         messageRepository.save(message);
