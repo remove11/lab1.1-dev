@@ -1,4 +1,7 @@
 package kth.alex.demo.service;
+import kth.alex.demo.Exeption.ClientErrorException;
+import kth.alex.demo.Exeption.NotFoundException;
+import kth.alex.demo.Exeption.ServerErrorException;
 import kth.alex.demo.RequestBodyData.UserCreationRequest;
 import kth.alex.demo.entity.Doctor;
 import kth.alex.demo.entityDTO.DoctorDTO;
@@ -8,9 +11,9 @@ import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.print.Doc;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 public class DoctorService {
@@ -21,8 +24,15 @@ public class DoctorService {
     private KeycloakRepository keycloakRepository;
 
 
-    public List<DoctorDTO> getAll() {
-        List<Doctor> doctors = doctorRepository.findAll();
+    public List<DoctorDTO> getAll() throws ServerErrorException {
+        List<Doctor> doctors;
+        try{
+            doctors = doctorRepository.findAll();
+        }
+        catch(Exception ex){
+            throw new ServerErrorException(ex.getMessage());
+        }
+
         List<DoctorDTO> doctorDTOs = new ArrayList<>();
         for (Doctor d : doctors) {
             DoctorDTO doctorDTO = new DoctorDTO(
@@ -40,8 +50,13 @@ public class DoctorService {
         return doctorDTOs;
     }
 
-    public DoctorDTO getBySocial(String socialNr) {
-        Doctor d = doctorRepository.findBySocialNr(socialNr);
+    public DoctorDTO getBySocial(String socialNr) throws ServerErrorException {
+        Doctor d;
+        try{
+             d = doctorRepository.findBySocialNr(socialNr);
+        }catch (Exception ex){
+            throw new ServerErrorException(ex.getMessage());
+        }
         return new DoctorDTO(
                 d.getSocialNr(),
                 d.getSurename(),
@@ -54,10 +69,13 @@ public class DoctorService {
         );
     }
 
-    public DoctorDTO save(UserCreationRequest doctorCreation){
+    public DoctorDTO save(UserCreationRequest doctorCreation) throws ClientErrorException, ServerErrorException, NotFoundException {
         Doctor doctor = new Doctor(doctorCreation);
 
-        UserRepresentation user = keycloakRepository.createUser(doctorCreation).orElseThrow();
+        UserRepresentation user = keycloakRepository.createUser(doctorCreation).orElse(null);
+
+        if(user == null)
+            throw new NotFoundException("User not found");
 
         doctor.setKeycloakId(user.getId());
 

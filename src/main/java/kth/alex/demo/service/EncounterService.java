@@ -2,6 +2,8 @@ package kth.alex.demo.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import kth.alex.demo.Exeption.NotFoundException;
+import kth.alex.demo.Exeption.ServerErrorException;
 import kth.alex.demo.RequestBodyData.EncounterCreate;
 import kth.alex.demo.entity.Doctor;
 import kth.alex.demo.entity.Encounter;
@@ -25,8 +27,13 @@ public class EncounterService {
     @Autowired
     DoctorRepository doctorRepository;
 
-    public List<EncounterDTO> getAll() {
-        List<Encounter> encounters = encounterRepository.findAll();
+    public List<EncounterDTO> getAll() throws ServerErrorException {
+        List<Encounter> encounters;
+        try{
+             encounters = encounterRepository.findAll();
+        }catch (Exception ex){
+            throw new ServerErrorException(ex.getMessage());
+        }
 
         List<EncounterDTO> encounterDTOs = new ArrayList<>();
         for (Encounter e : encounters) {
@@ -41,32 +48,49 @@ public class EncounterService {
     }
 
 
-    public EncounterDTO findById(String id) {
-        return encounterRepository.findById(id)
-            .map(e -> {
-                EncounterDTO encounterDTO = new EncounterDTO();
-                encounterDTO.setId(e.getId());
-                encounterDTO.setDoctorName(e.getCreatedBy().getSurename());
-                encounterDTO.setPatientName(e.getPatient().getSurename());
-                encounterDTO.setDescription(e.getDescription());
-                encounterDTO.setCreatedAt(e.getCreatedAt());
-                return encounterDTO;
-            })
-            .orElseThrow(() -> new EntityNotFoundException("Encounter not found with id " + id));
+    public EncounterDTO findById(String id) throws NotFoundException {
+        Encounter e = encounterRepository
+                .findById(id)
+                .orElseThrow(()-> new NotFoundException("Encounter not found"));
+
+        EncounterDTO encounterDTO = new EncounterDTO();
+        encounterDTO.setId(e.getId());
+        encounterDTO.setDoctorName(e.getCreatedBy().getSurename());
+        encounterDTO.setPatientName(e.getPatient().getSurename());
+        encounterDTO.setDescription(e.getDescription());
+        encounterDTO.setCreatedAt(e.getCreatedAt());
+
+        return encounterDTO;
     }
 
     @Transactional
-    public void create(EncounterCreate encounterCreate) {
+    public void create(EncounterCreate encounterCreate) throws ServerErrorException, NotFoundException {
         Encounter encounter = new Encounter();
 
-        Patient patient = patientRepository.findBySocialNr(encounterCreate.getPatientSocialNr());
-        Doctor doctor = doctorRepository.findByEmployeeId(encounterCreate.getDoctorEmployeeId());
+        Patient patient;
+        Doctor doctor;
+
+        try {
+            patient = patientRepository.findBySocialNr(encounterCreate.getPatientSocialNr());
+            doctor = doctorRepository.findByEmployeeId(encounterCreate.getDoctorEmployeeId());
+        }catch (Exception ex){
+            throw new ServerErrorException(ex.getMessage());
+        }
+
+        if(patient == null)
+            throw new NotFoundException("Patient not found");
+        if(doctor == null)
+            throw new NotFoundException("Doctor not found");
 
         encounter.setPatient(patient);
         encounter.setCreatedBy(doctor);
         encounter.setDescription(encounterCreate.getDescription());
 
-        encounterRepository.save(encounter);
+        try{
+            encounterRepository.save(encounter);
+        }catch (Exception ex){
+            throw new ServerErrorException(ex.getMessage());
+        }
     }
 }
 

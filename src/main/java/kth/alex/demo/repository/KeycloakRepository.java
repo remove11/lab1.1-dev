@@ -1,6 +1,8 @@
 package kth.alex.demo.repository;
 
 import jakarta.ws.rs.core.Response;
+import kth.alex.demo.Exeption.ClientErrorException;
+import kth.alex.demo.Exeption.ServerErrorException;
 import kth.alex.demo.RequestBodyData.UserCreationRequest;
 import kth.alex.demo.utils.KeycloakUtil;
 import org.keycloak.admin.client.Keycloak;
@@ -20,27 +22,29 @@ public class KeycloakRepository {
     @Value("${keycloak.utils.realm}")
     private String realm;
 
-    public List<UserRepresentation> getUsers(){
+    public List<UserRepresentation> getUsers() throws ServerErrorException {
         Keycloak keycloak = keycloakUtil.getInstance();
         try {
             List<UserRepresentation> users = keycloak.realm(realm).users().list();
             return users;
         }catch (Exception ex){
-            return new ArrayList<>();
+            throw new ServerErrorException(ex.getMessage());
         }
     }
 
-    public Optional<UserRepresentation> getUserById(String id){
+    public Optional<UserRepresentation> getUserById(String id) throws ServerErrorException {
         Keycloak keycloak = keycloakUtil.getInstance();
         try{
             UserRepresentation user = keycloak.realm(realm).users().get(id).toRepresentation();
+            if(user == null)
+                return Optional.empty();
             return Optional.of(user);
         }catch (Exception ex){
-            return Optional.empty();
+            throw new ServerErrorException(ex.getMessage());
         }
     }
 
-    public Optional<UserRepresentation> getUserByEmail(String email){
+    public Optional<UserRepresentation> getUserByEmail(String email) throws ServerErrorException {
         Keycloak keycloak = keycloakUtil.getInstance();
         try {
             List<UserRepresentation> users = keycloak.realm(realm).users().searchByEmail(email, true);
@@ -49,11 +53,11 @@ public class KeycloakRepository {
 
             return Optional.of(users.get(0));
         }catch (Exception ex){
-            return Optional.empty();
+            throw new ServerErrorException(ex.getMessage());
         }
     }
 
-    public Optional<UserRepresentation> getUserByUsername(String username){
+    public Optional<UserRepresentation> getUserByUsername(String username) throws ServerErrorException {
         Keycloak keycloak = keycloakUtil.getInstance();
         try {
             List<UserRepresentation> users = keycloak.realm(realm).users().searchByUsername(username, true);
@@ -62,44 +66,46 @@ public class KeycloakRepository {
 
             return Optional.of(users.get(0));
         }catch (Exception ex){
-            return Optional.empty();
+            throw new ServerErrorException(ex.getMessage());
         }
     }
 
-    public Optional<UserRepresentation> createUser(UserCreationRequest newUser){
-        try{
-            Keycloak keycloak = keycloakUtil.getInstance();
-            UserRepresentation userRep = toUserRep(newUser);
+    public Optional<UserRepresentation> createUser(UserCreationRequest newUser) throws ServerErrorException, ClientErrorException {
+        Keycloak keycloak = keycloakUtil.getInstance();
+        UserRepresentation userRep = toUserRep(newUser);
 
-            Response response = keycloak.realm(realm).users().create(userRep);
-            response.close();
+        Response response = keycloak.realm(realm).users().create(userRep);
+        response.close();
 
-            int statusCode = response.getStatus();
-            if(statusCode < 300 && statusCode >= 200){
-                return Optional.of(userRep);
-            }
-
-            return Optional.empty();
-        }catch (Exception ex){
-            return Optional.empty();
+        int statusCode = response.getStatus();
+        if(statusCode < 300 && statusCode >= 200){
+            return Optional.of(userRep);
         }
+        if(statusCode < 500 && statusCode >= 400){
+            throw new ClientErrorException("Can not create server(bad request)");
+        }
+        if(statusCode < 600 && statusCode >= 500){
+            throw new ServerErrorException("Can not create server(server error)");
+        }
+        throw new ServerErrorException("Something gone wrong");
     }
 
-    public boolean deleteUser(String id){
-        try{
-            Keycloak keycloak = keycloakUtil.getInstance();
-            Response response = keycloak.realm(realm).users().delete(id);
-            response.close();
+    public boolean deleteUser(String id) throws ClientErrorException, ServerErrorException {
+        Keycloak keycloak = keycloakUtil.getInstance();
+        Response response = keycloak.realm(realm).users().delete(id);
+        response.close();
 
-            int statusCode = response.getStatus();
-            if(statusCode >= 200 && statusCode < 300)
-                return true;
-
-            return false;
-        }catch (Exception ex){
-            return false;
+        int statusCode = response.getStatus();
+        if(statusCode >= 200 && statusCode < 300){
+            return true;
         }
-
+        if(statusCode < 500 && statusCode >= 400){
+            throw new ClientErrorException("Can not create server(bad request)");
+        }
+        if(statusCode < 600 && statusCode >= 500){
+            throw new ServerErrorException("Can not create server(server error)");
+        }
+        throw new ServerErrorException("Something gone wrong");
     }
 
     private UserRepresentation toUserRep(UserCreationRequest user){

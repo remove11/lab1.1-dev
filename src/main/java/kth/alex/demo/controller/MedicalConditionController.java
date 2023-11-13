@@ -1,6 +1,8 @@
 package kth.alex.demo.controller;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.persistence.EntityNotFoundException;
+import kth.alex.demo.Exeption.NotFoundException;
+import kth.alex.demo.Exeption.ServerErrorException;
 import kth.alex.demo.RequestBodyData.MedicalConditionCreate;
 import kth.alex.demo.entityDTO.MedicalConditionDTO;
 import kth.alex.demo.service.MedicalConditionService;
@@ -17,7 +19,7 @@ public class MedicalConditionController {
     private MedicalConditionService medicalConditionService;
 
     @GetMapping("/medicalCondition")
-    public List<MedicalConditionDTO> sayHello() {
+    public List<MedicalConditionDTO> sayHello() throws ServerErrorException {
         return medicalConditionService.getAll();
     }
 
@@ -29,6 +31,8 @@ public class MedicalConditionController {
             return ResponseEntity.ok(medicalConditionDTO);
         } catch (EntityNotFoundException ex) {
             return ResponseEntity.notFound().build();
+        } catch (NotFoundException e) {
+            throw new RuntimeException(e);
         }
     }
     @PostMapping("/medicalCondition")

@@ -1,6 +1,8 @@
 package kth.alex.demo.service;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import kth.alex.demo.Exeption.NotFoundException;
+import kth.alex.demo.Exeption.ServerErrorException;
 import kth.alex.demo.RequestBodyData.MedicalConditionCreate;
 import kth.alex.demo.RequestBodyData.MessageCreate;
 import kth.alex.demo.entity.*;
@@ -19,12 +21,16 @@ public class MessageService {
     private MessageRepository messageRepository;
     @Autowired
     PersonRepository personRepository;
-
     @Autowired
     IdentityRepository identityRepository;
 
-    public List<MessageDTO> getAll() {
-        List<Message> messages = messageRepository.findAll();
+    public List<MessageDTO> getAll() throws ServerErrorException {
+        List<Message> messages;
+        try {
+            messages = messageRepository.findAll();
+        }catch (Exception ex){
+            throw new ServerErrorException(ex.getMessage());
+        }
 
         List<MessageDTO> messageDTOs = new ArrayList<>();
         for (Message m : messages) {
@@ -39,49 +45,56 @@ public class MessageService {
         return messageDTOs;
     }
 
-    public MessageDTO findById(String id) {
-        return messageRepository.findById(id)
-                .map(m -> {
-                    MessageDTO messageDTO = new MessageDTO();
+    public MessageDTO findById(String id) throws NotFoundException {
+        Message m = messageRepository
+                .findById(id)
+                .orElseThrow(() -> new NotFoundException("Message not found"));
+        MessageDTO messageDTO = new MessageDTO();
 
-                    messageDTO.setId(m.getId());
-                    messageDTO.setSenderSocialNr(m.getSender().getSocialNr());
-                    messageDTO.setReceiverSocialNr(m.getReceiver().getSocialNr());
-                    messageDTO.setContent(m.getContent());
-                    messageDTO.setCreatedAt(m.getCreatedAt());
+        messageDTO.setId(m.getId());
+        messageDTO.setSenderSocialNr(m.getSender().getSocialNr());
+        messageDTO.setReceiverSocialNr(m.getReceiver().getSocialNr());
+        messageDTO.setContent(m.getContent());
+        messageDTO.setCreatedAt(m.getCreatedAt());
 
-                    return messageDTO;
-                })
-                .orElseThrow(() -> new EntityNotFoundException("Message not found with id " + id));
+        return messageDTO;
     }
 
     @Transactional
-    public void create(MessageCreate messageCreate) throws Exception {
+    public void create(MessageCreate messageCreate) throws ServerErrorException, NotFoundException {
         Message message = new Message();
         message.setContent(messageCreate.getDescription());
 
-        String keycloakId = identityRepository.getUserId().orElseThrow();
-        System.out.println(keycloakId + " = KEYID**************"); //finns
-        Person sender = personRepository.findByKeycloakId(keycloakId);
-        Person receiver = personRepository.findBySocialNr(messageCreate.getReceiverSocialNr());
-        // Har ingen sender här när jag kör via Swagger
+        String keycloakId = identityRepository
+                .getUserId()
+                .orElseThrow(() -> new NotFoundException("User Not found"));
 
-        if (sender == null) {
-            System.out.println("Sender is null");
+        Person sender;
+        Person reciver;
+
+        try {
+            sender = personRepository.findByKeycloakId(keycloakId);
+            reciver = personRepository.findBySocialNr(messageCreate.getReceiverSocialNr());
+        }catch (Exception ex){
+            throw new ServerErrorException(ex.getMessage());
         }
-        if (receiver == null) {
-            System.out.println("Receiver is null");
+
+        if(sender == null){
+            throw new NotFoundException("Sender not found");
         }
-        if (message.getContent() == null) {
-            System.out.println("Message content is null");
+        if(reciver == null){
+            throw new NotFoundException("Receiver not found");
         }
 
         message.setSender(sender);
-        message.setReceiver(receiver);
+        message.setReceiver(reciver);
         message.setContent(message.getContent());
 
-        messageRepository.save(message);
+        try{
+            messageRepository.save(message);
+        }catch (Exception ex){
+            throw new ServerErrorException(ex.getMessage());
+        }
     }
-
 }
 

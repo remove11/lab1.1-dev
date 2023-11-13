@@ -2,6 +2,7 @@ package kth.alex.demo.controller;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.persistence.EntityNotFoundException;
 import kth.alex.demo.RequestBodyData.EncounterCreate;
+import kth.alex.demo.Exeption.ServerErrorException;
 import kth.alex.demo.entityDTO.EncounterDTO;
 import kth.alex.demo.service.EncounterService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,7 @@ public class EncounterController {
     private EncounterService encounterService;
 
     @GetMapping("/encounter")
-    public List<EncounterDTO> sayHello() {
+    public List<EncounterDTO> sayHello() throws ServerErrorException {
         return encounterService.getAll();
     }
 

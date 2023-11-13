@@ -1,6 +1,8 @@
 package kth.alex.demo.controller;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.persistence.EntityNotFoundException;
+import kth.alex.demo.Exeption.NotFoundException;
+import kth.alex.demo.Exeption.ServerErrorException;
 import kth.alex.demo.RequestBodyData.MessageCreate;
 import kth.alex.demo.entityDTO.MedicalConditionDTO;
 import kth.alex.demo.entityDTO.MessageDTO;
@@ -18,7 +20,7 @@ public class MessageController {
     private MessageService messageService;
 
     @GetMapping("/message")
-    public List<MessageDTO> sayHello() {
+    public List<MessageDTO> sayHello() throws ServerErrorException {
         return messageService.getAll();
     }
 
@@ -28,7 +30,7 @@ public class MessageController {
         try {
             MessageDTO messageDTO = messageService.findById(id);
             return ResponseEntity.ok(messageDTO);
-        } catch (EntityNotFoundException ex) {
+        } catch (EntityNotFoundException | NotFoundException ex) {
             return ResponseEntity.notFound().build();
         }
     }

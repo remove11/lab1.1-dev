@@ -1,9 +1,9 @@
 package kth.alex.demo.controller;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.persistence.EntityNotFoundException;
-import kth.alex.demo.RequestBodyData.MedicalConditionCreate;
 import kth.alex.demo.RequestBodyData.ObservationCreate;
-import kth.alex.demo.entityDTO.EncounterDTO;
+import kth.alex.demo.Exeption.NotFoundException;
+import kth.alex.demo.Exeption.ServerErrorException;
 import kth.alex.demo.entityDTO.ObservationDTO;
 import kth.alex.demo.service.ObservationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ public class ObservationController {
     private ObservationService observationService;
 
     @GetMapping("/observation")
-    public List<ObservationDTO> sayHello() {
+    public List<ObservationDTO> sayHello() throws ServerErrorException {
         return observationService.getAll();
     }
 
@@ -29,7 +29,7 @@ public class ObservationController {
         try {
             ObservationDTO observationDTO = observationService.findById(id);
             return ResponseEntity.ok(observationDTO);
-        } catch (EntityNotFoundException ex) {
+        } catch (EntityNotFoundException | NotFoundException ex) {
             return ResponseEntity.notFound().build();
         }
     }

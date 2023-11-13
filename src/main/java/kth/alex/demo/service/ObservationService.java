@@ -2,7 +2,8 @@ package kth.alex.demo.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
-import kth.alex.demo.RequestBodyData.EncounterCreate;
+import kth.alex.demo.Exeption.NotFoundException;
+import kth.alex.demo.Exeption.ServerErrorException;
 import kth.alex.demo.RequestBodyData.ObservationCreate;
 import kth.alex.demo.entity.Doctor;
 import kth.alex.demo.entity.Encounter;
@@ -34,8 +35,14 @@ public class ObservationService {
     @Autowired
     DoctorRepository doctorRepository;
 
-    public List<ObservationDTO> getAll() {
-        List<Observation> observations = observationRepository.findAll();
+    public List<ObservationDTO> getAll() throws ServerErrorException {
+        List<Observation> observations;
+
+        try {
+            observations = observationRepository.findAll();
+        }catch (Exception ex){
+            throw new ServerErrorException(ex.getMessage());
+        }
 
         List<ObservationDTO> observationDTOs = new ArrayList<>();
         for (Observation o : observations) {
@@ -43,33 +50,41 @@ public class ObservationService {
             observationDTO.setId(o.getId());
             observationDTO.setDescription(o.getDescription());
             observationDTO.setCreatedAt(o.getCreatedAt());
-
             observationDTOs.add(observationDTO);
         }
         return observationDTOs;
     }
 
-    public ObservationDTO findById(String id) {
-        return observationRepository.findById(id)
-                .map(e -> {
-                    ObservationDTO observationDTO = new ObservationDTO();
-                    observationDTO.setId(e.getId());
-                    observationDTO.setDoctorName(e.getCreatedBy().getSurename());
-                    observationDTO.setPatientName(e.getPatient().getSurename());
-                    observationDTO.setDescription(e.getDescription());
-                    observationDTO.setCreatedAt(e.getCreatedAt());
-                    return observationDTO;
-                })
-                .orElseThrow(() -> new EntityNotFoundException("Encounter not found with id " + id));
+    public ObservationDTO findById(String id) throws NotFoundException {
+        Observation e = observationRepository
+                .findById(id)
+                .orElseThrow(()->new NotFoundException("Observation not found"));
+
+        ObservationDTO observationDTO = new ObservationDTO();
+        observationDTO.setId(e.getId());
+        observationDTO.setDoctorName(e.getCreatedBy().getSurename());
+        observationDTO.setPatientName(e.getPatient().getSurename());
+        observationDTO.setDescription(e.getDescription());
+        observationDTO.setCreatedAt(e.getCreatedAt());
+
+        return observationDTO;
     }
 
     @Transactional
-    public void create(ObservationCreate observationCreate) {
+    public void create(ObservationCreate observationCreate) throws ServerErrorException {
         Observation observation = new Observation();
 
-        Encounter encounter = encounterRepository.getReferenceById(observationCreate.getEncounterId());
-        Patient patient = patientRepository.findBySocialNr(observationCreate.getPatientSocialNr());
-        Doctor doctor = doctorRepository.findByEmployeeId(observationCreate.getDoctorEmployeeId());
+        Encounter encounter;
+        Patient patient;
+        Doctor doctor;
+
+        try{
+            encounter = encounterRepository.getReferenceById(observationCreate.getEncounterId());
+            patient = patientRepository.findBySocialNr(observationCreate.getPatientSocialNr());
+            doctor = doctorRepository.findByEmployeeId(observationCreate.getDoctorEmployeeId());
+        }catch (Exception ex){
+            throw new ServerErrorException(ex.getMessage());
+        }
 
         observation.setEncounter(encounter);
         observation.setPatient(patient);
@@ -81,7 +96,7 @@ public class ObservationService {
 
         }catch (Exception ex)
         {
-            System.out.println(ex.getMessage());
+            throw new ServerErrorException(ex.getMessage());
         }
     }
 }

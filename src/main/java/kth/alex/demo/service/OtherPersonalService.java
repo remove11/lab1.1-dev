@@ -1,4 +1,7 @@
 package kth.alex.demo.service;
+import kth.alex.demo.Exeption.ClientErrorException;
+import kth.alex.demo.Exeption.NotFoundException;
+import kth.alex.demo.Exeption.ServerErrorException;
 import kth.alex.demo.RequestBodyData.UserCreationRequest;
 import kth.alex.demo.entity.OtherPersonal;
 import kth.alex.demo.entityDTO.OtherPersonalDTO;
@@ -20,8 +23,18 @@ public class OtherPersonalService {
     @Autowired
     private KeycloakRepository keycloakRepository;
 
-    public List<OtherPersonalDTO> getAll() {
-        List<OtherPersonal> otherPersonals = otherPersonalRepository.findAll();
+    public List<OtherPersonalDTO> getAll() throws ServerErrorException, NotFoundException {
+        List<OtherPersonal> otherPersonals;
+
+        try {
+            otherPersonals = otherPersonalRepository.findAll();
+        }catch (Exception ex){
+            throw new ServerErrorException(ex.getMessage());
+        }
+
+        if(otherPersonals == null)
+            throw new NotFoundException("Other personal not found");
+
         List<OtherPersonalDTO> otherPersonalDTOS = new ArrayList<>();
         for (OtherPersonal o : otherPersonals) {
             OtherPersonalDTO otherPersonalDTO = new OtherPersonalDTO(
@@ -39,8 +52,19 @@ public class OtherPersonalService {
         return otherPersonalDTOS;
     }
 
-    public OtherPersonalDTO getBySocial(String socialNr) {
-        OtherPersonal o = otherPersonalRepository.findBySocialNr(socialNr);
+    public OtherPersonalDTO getBySocial(String socialNr) throws ServerErrorException, NotFoundException {
+        OtherPersonal o;
+
+        try {
+            o = otherPersonalRepository.findBySocialNr(socialNr);
+        }catch (Exception ex){
+            throw new ServerErrorException(ex.getMessage());
+        }
+
+        if(o == null){
+            throw new NotFoundException("OtherPersonal not found");
+        }
+
             return new OtherPersonalDTO(
                     o.getSocialNr(),
                     o.getSurename(),
@@ -54,13 +78,19 @@ public class OtherPersonalService {
 
     }
 
-    public OtherPersonalDTO save(UserCreationRequest otherPersonalCreation){
+    public OtherPersonalDTO save(UserCreationRequest otherPersonalCreation) throws ClientErrorException, ServerErrorException, NotFoundException {
         OtherPersonal otherPersonal = new OtherPersonal(otherPersonalCreation);
 
         UserRepresentation user = keycloakRepository.createUser(otherPersonalCreation).orElseThrow();
 
         otherPersonal.setKeycloakId(user.getId());
-        OtherPersonal o = otherPersonalRepository.save(otherPersonal);
+
+        OtherPersonal o;
+        try {
+            o = otherPersonalRepository.save(otherPersonal);
+        }catch (Exception ex){
+            throw new ServerErrorException(ex.getMessage());
+        }
 
         return new OtherPersonalDTO(
                 o.getSocialNr(),

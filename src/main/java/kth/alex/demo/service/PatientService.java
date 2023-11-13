@@ -1,4 +1,8 @@
 package kth.alex.demo.service;
+
+import kth.alex.demo.Exeption.ClientErrorException;
+import kth.alex.demo.Exeption.NotFoundException;
+import kth.alex.demo.Exeption.ServerErrorException;
 import kth.alex.demo.RequestBodyData.UserCreationRequest;
 import kth.alex.demo.entity.Patient;
 import kth.alex.demo.entityDTO.PatientDTO;
@@ -19,8 +23,14 @@ public class PatientService {
     @Autowired
     private KeycloakRepository keycloakRepository;
 
-    public List<PatientDTO> getAll() {
-        List<Patient> patients = patientRepository.findAll();
+    public List<PatientDTO> getAll() throws ServerErrorException {
+        List<Patient> patients;
+
+        try{
+            patients = patientRepository.findAll();
+        }catch (Exception ex){
+            throw new ServerErrorException(ex.getMessage());
+        }
 
         List<PatientDTO> patientDTOs = new ArrayList<>();
         for (Patient p : patients) {
@@ -39,29 +49,18 @@ public class PatientService {
         return patientDTOs;
     }
 
-    public PatientDTO getBySocial(String socialNr) {
-        Patient p = patientRepository.findBySocialNr(socialNr);
-            return new PatientDTO(
-                    p.getSocialNr(),
-                    p.getSurename(),
-                    p.getLastname(),
-                    p.getAdress(),
-                    p.getPhoneNr(),
-                    p.getGender(),
-                    p.getKeycloakId(),
-                    p.getCreatedAt()
-            );
-    }
+    public PatientDTO getBySocial(String socialNr) throws ServerErrorException, NotFoundException {
+        Patient p;
 
-    public PatientDTO save(UserCreationRequest patientDTO){
-        Patient patient = new Patient(patientDTO);
+        try {
+            p = patientRepository.findBySocialNr(socialNr);
+        }catch (Exception ex){
+            throw new ServerErrorException(ex.getMessage());
+        }
 
-        keycloakRepository.createUser(patientDTO).orElseThrow();
-        UserRepresentation u = keycloakRepository.getUserByEmail(patientDTO.getEmail()).orElseThrow();
+        if(p == null)
+            throw new NotFoundException("Patient not found");
 
-        patient.setKeycloakId(u.getId());
-
-        Patient p = patientRepository.save(patient);
         return new PatientDTO(
                 p.getSocialNr(),
                 p.getSurename(),
@@ -74,5 +73,32 @@ public class PatientService {
         );
     }
 
+    public PatientDTO save(UserCreationRequest patientDTO) throws ClientErrorException, ServerErrorException {
+        Patient patient = new Patient(patientDTO);
+
+        keycloakRepository.createUser(patientDTO).orElseThrow();
+        UserRepresentation u = keycloakRepository.getUserByEmail(patientDTO.getEmail()).orElseThrow();
+
+        patient.setKeycloakId(u.getId());
+
+        Patient p;
+
+        try{
+            p = patientRepository.save(patient);
+        }catch (Exception ex){
+            throw new ServerErrorException(ex.getMessage());
+        }
+
+        return new PatientDTO(
+                p.getSocialNr(),
+                p.getSurename(),
+                p.getLastname(),
+                p.getAdress(),
+                p.getPhoneNr(),
+                p.getGender(),
+                p.getKeycloakId(),
+                p.getCreatedAt()
+        );
+    }
 }
 
