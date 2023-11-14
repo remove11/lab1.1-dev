@@ -70,6 +70,25 @@ public class ObservationService {
         return observationDTO;
     }
 
+    public List<ObservationDTO> findListById(String id) throws NotFoundException {
+        List<ObservationDTO> observationDTOs = new ArrayList<>();
+        List<Observation> observations = observationRepository.findListById(id);
+
+        for (Observation o : observations) {
+            observationDTOs.add(new ObservationDTO(
+                    o.getId(),
+                    o.getPatient().getSurename(),
+                    o.getPatient().getSocialNr(),
+                    o.getCreatedBy().getSurename(),
+                    o.getCreatedBy().getEmployeeId(),
+                    o.getDescription(),
+                    o.getEncounter().getId(),
+                    o.getCreatedAt()
+            ));
+        }
+            return observationDTOs;
+    }
+
     @Transactional
     public void create(ObservationCreate observationCreate) throws ServerErrorException {
         Observation observation = new Observation();

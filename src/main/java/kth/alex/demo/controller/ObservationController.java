@@ -4,6 +4,7 @@ import jakarta.persistence.EntityNotFoundException;
 import kth.alex.demo.RequestBodyData.ObservationCreate;
 import kth.alex.demo.Exeption.NotFoundException;
 import kth.alex.demo.Exeption.ServerErrorException;
+import kth.alex.demo.entityDTO.EncounterDTO;
 import kth.alex.demo.entityDTO.ObservationDTO;
 import kth.alex.demo.repository.IdentityRepository;
 import kth.alex.demo.service.ObservationService;
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -36,6 +38,18 @@ public class ObservationController {
         try {
             ObservationDTO observationDTO = observationService.findById(id);
             return ResponseEntity.ok(observationDTO);
+        } catch (EntityNotFoundException | NotFoundException ex) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+    @GetMapping("/observation/list/{id}")
+    public ResponseEntity<List<ObservationDTO>> getListById(@PathVariable String id) {
+        if(!identityRepository.getUserId().equals(id)){
+            return ResponseEntity.status(403).build();
+        }
+        try {
+            List<ObservationDTO> observationDTOs = observationService.findListById(id);
+            return ResponseEntity.ok(Collections.singletonList((ObservationDTO) observationDTOs));
         } catch (EntityNotFoundException | NotFoundException ex) {
             return ResponseEntity.notFound().build();
         }

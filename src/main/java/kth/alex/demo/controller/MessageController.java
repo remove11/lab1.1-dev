@@ -48,8 +48,8 @@ public class MessageController {
             return ResponseEntity.status(403).build();
         }
         try {
-            List<MessageDTO> messageDTO = messageService.findListById(id);
-            return ResponseEntity.ok(Collections.singletonList((MessageDTO) messageDTO));
+            List<MessageDTO> messageDTOs = messageService.findListById(id);
+            return ResponseEntity.ok(Collections.singletonList((MessageDTO) messageDTOs));
         } catch (EntityNotFoundException | NotFoundException ex) {
             return ResponseEntity.notFound().build();
         }

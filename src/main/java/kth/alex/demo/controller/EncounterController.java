@@ -1,9 +1,11 @@
 package kth.alex.demo.controller;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.persistence.EntityNotFoundException;
+import kth.alex.demo.Exeption.NotFoundException;
 import kth.alex.demo.RequestBodyData.EncounterCreate;
 import kth.alex.demo.Exeption.ServerErrorException;
 import kth.alex.demo.entityDTO.EncounterDTO;
+import kth.alex.demo.entityDTO.MessageDTO;
 import kth.alex.demo.repository.IdentityRepository;
 import kth.alex.demo.service.EncounterService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -43,6 +46,19 @@ public class EncounterController {
         }catch (Exception ex){
             ResponseEntity.internalServerError().body("ex");
             return null;
+        }
+    }
+
+    @GetMapping("/encounter/list/{id}")
+    public ResponseEntity<List<EncounterDTO>> getListById(@PathVariable String id) {
+        if(!identityRepository.getUserId().equals(id)){
+            return ResponseEntity.status(403).build();
+        }
+        try {
+            List<EncounterDTO> encounterDTOs = encounterService.findListById(id);
+            return ResponseEntity.ok(Collections.singletonList((EncounterDTO) encounterDTOs));
+        } catch (EntityNotFoundException | NotFoundException ex) {
+            return ResponseEntity.notFound().build();
         }
     }
 

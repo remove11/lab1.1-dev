@@ -7,8 +7,10 @@ import kth.alex.demo.Exeption.ServerErrorException;
 import kth.alex.demo.RequestBodyData.EncounterCreate;
 import kth.alex.demo.entity.Doctor;
 import kth.alex.demo.entity.Encounter;
+import kth.alex.demo.entity.Message;
 import kth.alex.demo.entity.Patient;
 import kth.alex.demo.entityDTO.EncounterDTO;
+import kth.alex.demo.entityDTO.MessageDTO;
 import kth.alex.demo.repository.DoctorRepository;
 import kth.alex.demo.repository.EncounterRepository;
 import kth.alex.demo.repository.PatientRepository;
@@ -61,6 +63,23 @@ public class EncounterService {
         encounterDTO.setCreatedAt(e.getCreatedAt());
 
         return encounterDTO;
+    }
+
+    public List<EncounterDTO> findListById(String id) throws NotFoundException {
+        List<EncounterDTO> encounterDTOs = new ArrayList<>();
+        List<Encounter> encounters = encounterRepository.findListById(id);
+
+        for (Encounter e : encounters) {
+            encounterDTOs.add(new EncounterDTO(
+                    e.getId(),
+                    e.getPatient().getSocialNr(),
+                    e.getPatient().getSurename(),
+                    e.getCreatedBy().getSocialNr(),
+                    e.getCreatedBy().getSurename(),
+                    e.getDescription(),
+                    e.getCreatedAt()));
+        }
+        return encounterDTOs;
     }
 
     @Transactional

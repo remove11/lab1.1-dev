@@ -4,6 +4,7 @@ import jakarta.persistence.EntityNotFoundException;
 import kth.alex.demo.Exeption.NotFoundException;
 import kth.alex.demo.Exeption.ServerErrorException;
 import kth.alex.demo.RequestBodyData.MedicalConditionCreate;
+import kth.alex.demo.entityDTO.EncounterDTO;
 import kth.alex.demo.entityDTO.MedicalConditionDTO;
 import kth.alex.demo.repository.IdentityRepository;
 import kth.alex.demo.service.MedicalConditionService;
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -40,6 +42,18 @@ public class MedicalConditionController {
             return ResponseEntity.notFound().build();
         } catch (NotFoundException e) {
             throw new RuntimeException(e);
+        }
+    }
+    @GetMapping("/medicalCondition/list/{id}")
+    public ResponseEntity<List<MedicalConditionDTO>> getListById(@PathVariable String id) {
+        if(!identityRepository.getUserId().equals(id)){
+            return ResponseEntity.status(403).build();
+        }
+        try {
+            List<MedicalConditionDTO> medicalConditionDTOs = medicalConditionService.findListById(id);
+            return ResponseEntity.ok(Collections.singletonList((MedicalConditionDTO) medicalConditionDTOs));
+        } catch (EntityNotFoundException | NotFoundException ex) {
+            return ResponseEntity.notFound().build();
         }
     }
     @PostMapping("/medicalCondition")
