@@ -14,4 +14,5 @@ public interface MessageRepository extends JpaRepository<Message, String> {
 
     @Query("select m from Message m join fetch m.receiver join fetch m.sender where (m.receiver.socialNr = ?1 and m.sender.socialNr = ?2) or (m.sender.socialNr = ?1 and m.receiver.socialNr = ?2) order by m.createdAt asc")
     public List<Message> findConversation(String p1Id, String p2Id);
+    public List<Message> findListById(String id);
 }

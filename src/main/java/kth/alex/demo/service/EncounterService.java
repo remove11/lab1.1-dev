@@ -9,6 +9,9 @@ import kth.alex.demo.entity.Encounter;
 import kth.alex.demo.entity.Patient;
 import kth.alex.demo.entityDTO.EncounterDTO;
 import kth.alex.demo.repository.*;
+import kth.alex.demo.repository.DoctorRepository;
+import kth.alex.demo.repository.EncounterRepository;
+import kth.alex.demo.repository.PatientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -87,6 +90,23 @@ public class EncounterService {
         encounterDTO.setDoctorEmployeeId(e.getCreatedBy().getEmployeeId());
 
         return encounterDTO;
+    }
+
+    public List<EncounterDTO> findListById(String id) throws NotFoundException {
+        List<EncounterDTO> encounterDTOs = new ArrayList<>();
+        List<Encounter> encounters = encounterRepository.findListById(id);
+
+        for (Encounter e : encounters) {
+            encounterDTOs.add(new EncounterDTO(
+                    e.getId(),
+                    e.getPatient().getSocialNr(),
+                    e.getPatient().getSurename(),
+                    e.getCreatedBy().getSocialNr(),
+                    e.getCreatedBy().getSurename(),
+                    e.getDescription(),
+                    e.getCreatedAt()));
+        }
+        return encounterDTOs;
     }
 
     @Transactional

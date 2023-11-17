@@ -6,6 +6,8 @@ import kth.alex.demo.Exeption.ServerErrorException;
 import kth.alex.demo.RequestBodyData.UserCreationRequest;
 import kth.alex.demo.utils.KeycloakUtil;
 import org.keycloak.admin.client.Keycloak;
+import org.keycloak.admin.client.resource.RoleMappingResource;
+import org.keycloak.admin.client.resource.UserResource;
 import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
@@ -75,8 +77,17 @@ public class KeycloakRepository {
         Keycloak keycloak = keycloakUtil.getInstance();
         UserRepresentation userRep = toUserRep(newUser, role);
 
+
+
         Response response = keycloak.realm(realm).users().create(userRep);
         response.close();
+
+        List<UserRepresentation> users = keycloak.realm(realm).users().searchByEmail(newUser.getEmail(), true);
+        RoleRepresentation roleRepresentation = keycloak.realm(realm).roles().get(role).toRepresentation();
+        List<RoleRepresentation> roleReps = new ArrayList<>();
+        roleReps.add(roleRepresentation);
+        keycloak.realm(realm).users().get(users.get(0).getId()).roles().realmLevel().add(roleReps);
+
 
         int statusCode = response.getStatus();
         if(statusCode < 300 && statusCode >= 200){

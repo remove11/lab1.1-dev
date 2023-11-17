@@ -6,9 +6,11 @@ import kth.alex.demo.Exeption.NotFoundException;
 import kth.alex.demo.Exeption.ServerErrorException;
 import kth.alex.demo.RequestBodyData.MedicalConditionCreate;
 import kth.alex.demo.entity.Doctor;
+import kth.alex.demo.entity.Encounter;
 import kth.alex.demo.entity.MedicalCondition;
 import kth.alex.demo.entity.Patient;
 import kth.alex.demo.entityDTO.DoctorDTO;
+import kth.alex.demo.entityDTO.EncounterDTO;
 import kth.alex.demo.entityDTO.MedicalConditionDTO;
 import kth.alex.demo.repository.DoctorRepository;
 import kth.alex.demo.repository.IdentityRepository;
@@ -76,7 +78,7 @@ public class MedicalConditionService {
     public MedicalConditionDTO findById(String id) throws NotFoundException {
 
         MedicalCondition m = medicalConditionRepository
-                .findById(id)
+                .findById(Long.valueOf(id))
                 .orElseThrow(() -> new NotFoundException("Medical Condition not found"));
 
         MedicalConditionDTO medicalConditionDTO = new MedicalConditionDTO();
@@ -88,6 +90,24 @@ public class MedicalConditionService {
         medicalConditionDTO.setCreatedAt(m.getCreatedAt());
 
         return medicalConditionDTO;
+    }
+
+    public List<MedicalConditionDTO> findListById(String id) throws NotFoundException {
+        List<MedicalConditionDTO> medicalConditionDTOs = new ArrayList<>();
+        List<MedicalCondition> medicalConditions = medicalConditionRepository.findListById(id);
+
+        for (MedicalCondition m :  medicalConditions) {
+            medicalConditionDTOs.add(new MedicalConditionDTO(
+                    m.getId(),
+                    m.getPatient().getSocialNr(),
+                    m.getPatient().getSurename(),
+                    m.getDoctor().getSocialNr(),
+                    m.getDoctor().getSurename(),
+                    m.getDiagnos(),
+                    m.getCreatedAt()));
+        }
+
+        return medicalConditionDTOs;
     }
 
     @Transactional

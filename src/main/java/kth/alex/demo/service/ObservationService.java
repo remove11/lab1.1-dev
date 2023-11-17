@@ -1,18 +1,19 @@
 package kth.alex.demo.service;
 
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import kth.alex.demo.Exeption.NotFoundException;
 import kth.alex.demo.Exeption.ServerErrorException;
-import kth.alex.demo.RequestBodyData.EncounterCreate;
 import kth.alex.demo.RequestBodyData.ObservationCreate;
 import kth.alex.demo.entity.Doctor;
 import kth.alex.demo.entity.Encounter;
 import kth.alex.demo.entity.Observation;
 import kth.alex.demo.entity.Patient;
-import kth.alex.demo.entityDTO.EncounterDTO;
 import kth.alex.demo.entityDTO.ObservationDTO;
 import kth.alex.demo.repository.*;
+import kth.alex.demo.repository.DoctorRepository;
+import kth.alex.demo.repository.EncounterRepository;
+import kth.alex.demo.repository.ObservationRepository;
+import kth.alex.demo.repository.PatientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,47 +32,6 @@ public class ObservationService {
     IdentityRepository identityRepository;
     @Autowired
     EncounterRepository encounterRepository;
-
-    @Transactional
-    public void create(ObservationCreate observationCreate) throws ServerErrorException, NotFoundException {
-        Observation observation = new Observation();
-
-        String keycloakId = identityRepository
-                .getUserId()
-                .orElseThrow(() -> new NotFoundException("User Not found"));
-
-        System.out.println("keycloakId: "+keycloakId);
-
-        Patient patient;
-        Doctor doctor;
-        Encounter encounter;
-
-        try {
-            patient = patientRepository.findBySocialNr(observationCreate.getPatientSocialNr());
-            doctor = doctorRepository.findByKeycloakId(keycloakId);
-            encounter = encounterRepository.findById(observationCreate.getEncounterId()).orElse(null);
-        } catch (Exception ex) {
-            throw new ServerErrorException(ex.getMessage());
-        }
-
-        if (patient == null)
-            throw new NotFoundException("Patient not found");
-        if (doctor == null)
-            throw new NotFoundException("Doctor not found");
-        if (encounter == null)
-            throw new NotFoundException("Encounter not found");
-
-        observation.setPatient(patient);
-        observation.setCreatedBy(doctor);
-        observation.setEncounter(encounter);
-        observation.setDescription(observationCreate.getDescription());
-
-        try {
-            observationRepository.save(observation);
-        } catch (Exception ex) {
-            throw new ServerErrorException(ex.getMessage());
-        }
-    }
 
 
     public List<ObservationDTO> getAll() throws ServerErrorException {
@@ -132,6 +92,57 @@ public class ObservationService {
         observationDTO.setCreatedAt(e.getCreatedAt());
 
         return observationDTO;
+    }
+
+    public List<ObservationDTO> findListById(String id) throws NotFoundException {
+        List<ObservationDTO> observationDTOs = new ArrayList<>();
+        List<Observation> observations = observationRepository.findListById(id);
+
+        for (Observation o : observations) {
+            observationDTOs.add(new ObservationDTO(
+                    o.getId(),
+                    o.getPatient().getSurename(),
+                    o.getPatient().getSocialNr(),
+                    o.getCreatedBy().getSurename(),
+                    o.getCreatedBy().getEmployeeId(),
+                    o.getDescription(),
+                    o.getEncounter().getId(),
+                    o.getCreatedAt()
+            ));
+        }
+            return observationDTOs;
+    }
+
+    @Transactional
+    public void create(ObservationCreate observationCreate) throws ServerErrorException {
+        Observation observation = new Observation();
+
+        Encounter encounter;
+        Patient patient;
+        Doctor doctor;
+
+        String doctorId = identityRepository.getUserId().orElseThrow(()->new ServerErrorException("Can not get doctor id"));
+
+        try{
+            encounter = encounterRepository.getReferenceById(observationCreate.getEncounterId());
+            patient = patientRepository.findBySocialNr(observationCreate.getPatientSocialNr());
+            doctor = doctorRepository.findByKeycloakId(doctorId);
+        }catch (Exception ex){
+            throw new ServerErrorException(ex.getMessage());
+        }
+
+        observation.setEncounter(encounter);
+        observation.setPatient(patient);
+        observation.setCreatedBy(doctor);
+        observation.setDescription(observationCreate.getDescription());
+
+        try{
+            observationRepository.save(observation);
+
+        }catch (Exception ex)
+        {
+            throw new ServerErrorException(ex.getMessage());
+        }
     }
 }
 

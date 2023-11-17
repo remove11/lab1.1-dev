@@ -24,7 +24,6 @@ public class Patient extends Person{
     private List<Message> receiverMsg;
     @OneToMany(mappedBy = "patient")
     private List<MedicalCondition> medicalConditions;
-
     @OneToMany(mappedBy = "patient")
     private List<Encounter> encounter;
 

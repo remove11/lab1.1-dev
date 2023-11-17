@@ -10,6 +10,7 @@ import kth.alex.demo.repository.KeycloakRepository;
 import kth.alex.demo.service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,13 +26,14 @@ public class PatientController {
     private KeycloakRepository keycloakRepository;
 
     @GetMapping("/patient")
+    @PreAuthorize("hasRole('doctor') || hasRole('otherPersonal')")
     public List<PatientDTO> sayHello() throws ServerErrorException {
         return patientService.getAll();
     }
 
     @GetMapping("/patient/{socialNr}")
+    @PreAuthorize("hasRole('doctor') || hasRole('otherPersonal')")
     public ResponseEntity<PatientDTO> getOtherById(@PathVariable String socialNr) {
-        System.out.println(socialNr + " -----------------------");
         try {
             PatientDTO patientDTO = patientService.getBySocial(socialNr);
 
@@ -45,7 +47,7 @@ public class PatientController {
         System.out.println("inside create patient");
         try{
             patientService.save(userCreationRequest);
-            return ResponseEntity.ok("Doctor created");
+            return ResponseEntity.ok("Patient created");
         }catch (Exception ex){
             return ResponseEntity.notFound().build();
         }

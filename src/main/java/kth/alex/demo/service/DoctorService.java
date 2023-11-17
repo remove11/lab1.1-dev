@@ -78,7 +78,7 @@ public class DoctorService {
     public DoctorDTO save(UserCreationRequest doctorCreation) throws ClientErrorException, ServerErrorException, NotFoundException {
         Doctor doctor = new Doctor(doctorCreation);
 
-        keycloakRepository.createUser(doctorCreation, "DOCTOR").orElseThrow();
+        keycloakRepository.createUser(doctorCreation, "doctor").orElseThrow();
         UserRepresentation user = keycloakRepository.getUserByEmail(doctorCreation.getEmail()).orElseThrow();
 
         doctor.setKeycloakId(user.getId());

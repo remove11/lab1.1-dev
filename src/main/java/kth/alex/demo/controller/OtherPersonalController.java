@@ -8,6 +8,7 @@ import kth.alex.demo.entityDTO.OtherPersonalDTO;
 import kth.alex.demo.service.OtherPersonalService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -34,10 +35,11 @@ public class OtherPersonalController {
         }
     }
     @PostMapping("/otherPersonal")
+    @PreAuthorize("hasRole('admin')")
     public ResponseEntity<String> create(@RequestBody UserCreationRequest userCreationRequest){
         try{
             otherPersonalService.save(userCreationRequest);
-            return ResponseEntity.ok("Doctor created");
+            return ResponseEntity.ok("OtherPersonal created");
         }catch (Exception ex){
             return ResponseEntity.notFound().build();
         }

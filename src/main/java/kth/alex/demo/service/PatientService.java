@@ -4,11 +4,8 @@ import kth.alex.demo.Exeption.ClientErrorException;
 import kth.alex.demo.Exeption.NotFoundException;
 import kth.alex.demo.Exeption.ServerErrorException;
 import kth.alex.demo.RequestBodyData.UserCreationRequest;
-import kth.alex.demo.entity.Doctor;
 import kth.alex.demo.entity.Patient;
-import kth.alex.demo.entityDTO.DoctorDTO;
 import kth.alex.demo.entityDTO.PatientDTO;
-import kth.alex.demo.repository.DoctorRepository;
 import kth.alex.demo.repository.KeycloakRepository;
 import kth.alex.demo.repository.PatientRepository;
 import org.keycloak.representations.idm.UserRepresentation;
@@ -86,7 +83,7 @@ public class PatientService {
     public PatientDTO save(UserCreationRequest patientDTO) throws ClientErrorException, ServerErrorException {
         Patient patient = new Patient(patientDTO);
 
-        keycloakRepository.createUser(patientDTO, "PATIENT").orElseThrow();
+        keycloakRepository.createUser(patientDTO, "patient").orElseThrow();
         UserRepresentation u = keycloakRepository.getUserByEmail(patientDTO.getEmail()).orElseThrow();
 
         patient.setKeycloakId(u.getId());

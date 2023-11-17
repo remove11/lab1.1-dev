@@ -9,6 +9,7 @@ import kth.alex.demo.entity.*;
 import kth.alex.demo.entityDTO.MessageDTO;
 import kth.alex.demo.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -59,6 +60,24 @@ public class MessageService {
         return messageDTO;
     }
 
+    public List<MessageDTO> findListById(String id) throws NotFoundException {
+        List<MessageDTO> messageDTOs = new ArrayList<>();
+        List<Message> messages = messageRepository.findListById(id);
+
+        for (Message m : messages) {
+            messageDTOs.add(new MessageDTO(
+                    m.getId(),
+                    m.getSender().getSurename(),
+                    m.getSender().getSocialNr(),
+                    m.getReceiver().getSurename(),
+                    m.getReceiver().getSocialNr(),
+                    m.getContent(),
+                    m.getCreatedAt()));
+        }
+
+        return messageDTOs;
+    }
+
     @Transactional
     public void create(MessageCreate messageCreate) throws ServerErrorException, NotFoundException {
         Message message = new Message();
@@ -99,13 +118,8 @@ public class MessageService {
     public List<MessageDTO> getConversation(String p1, String p2) throws ServerErrorException {
         List<Message> messages;
         try {
-            System.out.println("----------------1");
             messages = messageRepository.findConversation(p1, p2);
-            System.out.println("----------------2");
         }catch (Exception ex){
-            System.out.println("----------------3");
-            System.out.println(ex);
-            System.out.println(ex.getMessage());
             throw new ServerErrorException(ex.getMessage());
         }
 

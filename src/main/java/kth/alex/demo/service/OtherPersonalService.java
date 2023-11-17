@@ -87,7 +87,7 @@ public class OtherPersonalService {
     public OtherPersonalDTO save(UserCreationRequest otherPersonalCreation) throws ClientErrorException, ServerErrorException, NotFoundException {
         OtherPersonal otherPersonal = new OtherPersonal(otherPersonalCreation);
 
-        UserRepresentation user = keycloakRepository.createUser(otherPersonalCreation,"STAFF").orElseThrow();
+        UserRepresentation user = keycloakRepository.createUser(otherPersonalCreation,"otherPersonal").orElseThrow();
 
         otherPersonal.setKeycloakId(user.getId());
 

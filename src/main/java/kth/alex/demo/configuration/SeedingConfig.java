@@ -33,6 +33,14 @@ public class SeedingConfig {
             doctor.setSocialNr("3333334");
             doctor.setEmployeeId("32");
 
+            Doctor doctor2 = new Doctor();
+            doctor2.setAdress("address2");
+            doctor2.setLastname("lastname3");
+            doctor2.setGender(Person.Gender.WOMAN);
+            doctor2.setPhoneNr("222");
+            doctor2.setSurename("surename2");
+            doctor2.setSocialNr("2222221");
+            doctor2.setEmployeeId("22");
 
             OtherPersonal otherPersonal = new OtherPersonal();
             otherPersonal.setAdress("address33");
@@ -50,6 +58,15 @@ public class SeedingConfig {
             msg.setSender(patient);
             msg.setReceiver(doctor);
 
+            Message msg1 = new Message();
+            msg1.setContent("Du har tid idag2");
+            msg1.setSender(patient);
+            msg1.setReceiver(doctor);
+
+            Message msg2 = new Message();
+            msg2.setContent("Du har tid idag3");
+            msg2.setSender(patient);
+            msg2.setReceiver(doctor2);
 
 
             System.out.println("YOYOYOY1");
@@ -58,8 +75,11 @@ public class SeedingConfig {
             patientRepository.save(patient);
             System.out.println("YOYOYOY3");
             doctorRepository.save(doctor);
+            doctorRepository.save(doctor2);
             System.out.println("YOYOYOY4");
             messageRepository.save(msg);
+            messageRepository.save(msg1);
+            messageRepository.save(msg2);
             System.out.println("YOYOYOY5");
 
             Encounter encounter = new Encounter();

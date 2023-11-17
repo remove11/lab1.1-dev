@@ -8,6 +8,9 @@ select * from other_personal;
 select * from message;
 select * from encounter;
 select * from medicalcondition;
+select * from employee;
+select * from observation;
+
 
 select *
 from information_schema.table_constraints
