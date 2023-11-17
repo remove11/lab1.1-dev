@@ -45,7 +45,8 @@ public class PatientService {
                     p.getPhoneNr(),
                     p.getGender(),
                     p.getKeycloakId(),
-                    p.getCreatedAt()
+                    p.getCreatedAt(),
+                    ""
             );
             patientDTOs.add(patientDTO);
         }
@@ -54,10 +55,15 @@ public class PatientService {
 
     public PatientDTO getBySocial(String socialNr) throws ServerErrorException, NotFoundException {
         Patient p;
+        UserRepresentation keyU;
 
         try {
             p = patientRepository.findBySocialNr(socialNr);
+            System.out.println(p.getSocialNr());
+            keyU = keycloakRepository.getUserById(p.getKeycloakId()).orElseThrow(()->new NotFoundException("Keycloak user notfound"));
+            System.out.println(keyU.getUsername());
         }catch (Exception ex){
+            System.out.println(ex);
             throw new ServerErrorException(ex.getMessage());
         }
 
@@ -72,14 +78,15 @@ public class PatientService {
                 p.getPhoneNr(),
                 p.getGender(),
                 p.getKeycloakId(),
-                p.getCreatedAt()
+                p.getCreatedAt(),
+                keyU.getEmail()
         );
     }
 
     public PatientDTO save(UserCreationRequest patientDTO) throws ClientErrorException, ServerErrorException {
         Patient patient = new Patient(patientDTO);
 
-        keycloakRepository.createUser(patientDTO).orElseThrow();
+        keycloakRepository.createUser(patientDTO, "PATIENT").orElseThrow();
         UserRepresentation u = keycloakRepository.getUserByEmail(patientDTO.getEmail()).orElseThrow();
 
         patient.setKeycloakId(u.getId());
@@ -100,7 +107,8 @@ public class PatientService {
                 p.getPhoneNr(),
                 p.getGender(),
                 p.getKeycloakId(),
-                p.getCreatedAt()
+                p.getCreatedAt(),
+                ""
         );
     }
 }

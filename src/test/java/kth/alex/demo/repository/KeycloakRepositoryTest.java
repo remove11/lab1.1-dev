@@ -1,5 +1,7 @@
 package kth.alex.demo.repository;
 
+import kth.alex.demo.Exeption.ClientErrorException;
+import kth.alex.demo.Exeption.ServerErrorException;
 import kth.alex.demo.entity.Person;
 import kth.alex.demo.RequestBodyData.UserCreationRequest;
 import org.junit.jupiter.api.Test;
@@ -16,7 +18,7 @@ class KeycloakRepositoryTest {
     KeycloakRepository keycloakRepository;
 
     @Test
-    void getUsers() {
+    void getUsers() throws ServerErrorException {
         List<UserRepresentation> users = keycloakRepository.getUsers();
         users.forEach(user -> {
             System.out.println(user.getEmail());
@@ -26,7 +28,7 @@ class KeycloakRepositoryTest {
     }
 
     @Test
-    void getUserById() {
+    void getUserById() throws ServerErrorException {
         UserRepresentation user = keycloakRepository.getUserById("c2a3ab26-50b5-4c15-8da0-76692da5dbfb").orElse(null);
         System.out.println(user);
         System.out.println(user.getEmail());
@@ -39,7 +41,7 @@ class KeycloakRepositoryTest {
     }
 
     @Test
-    void userCreationUser() {
+    void userCreationUser() throws ClientErrorException, ServerErrorException {
         UserCreationRequest newUser = UserCreationRequest.builder()
                 .username("newuser") .password("newuser")
                 .surename("my") .lastname("name")
@@ -48,18 +50,18 @@ class KeycloakRepositoryTest {
                 .gender(Person.Gender.OTHER) .createdAt(LocalDateTime.now())
                 .employeeId("332") .degreeId("2223")
                 .build();
-        UserRepresentation user = keycloakRepository.createUser(newUser).orElse(null);
+        UserRepresentation user = keycloakRepository.createUser(newUser, "PATIENT").orElse(null);
         assert user != null;
     }
 
     @Test
-    void userDeletionUser() {
+    void userDeletionUser() throws ClientErrorException, ServerErrorException {
         boolean res = keycloakRepository.deleteUser("175edad6-da71-4300-bf97-2051d1d69a48");
         assert res;
     }
 
     @Test
-    void getUserByEmail() {
+    void getUserByEmail() throws ServerErrorException {
         UserRepresentation res = keycloakRepository.getUserByEmail("admin@kth.se").orElse(null);
 
         assert res != null;

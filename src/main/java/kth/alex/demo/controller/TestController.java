@@ -35,7 +35,7 @@ public class TestController {
         System.out.println(user);
         return user;
     }
-    @GetMapping("/claims")
+    @GetMapping("/claimss")
     public Map<String, Object> getClaims(){
         final Jwt user = (Jwt) SecurityContextHolder.getContext()
                 .getAuthentication()

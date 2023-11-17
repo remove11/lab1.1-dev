@@ -4,13 +4,16 @@ package kth.alex.demo.configuration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
 
 import java.io.IOException;
+import java.util.Collections;
 
 @Configuration
 @EnableWebSecurity
@@ -29,11 +32,15 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+
         http.csrf(t -> {
             t.disable();
         });
         http.authorizeHttpRequests(authorize -> {
-            authorize.requestMatchers(AUTH_WHITE_LIST).permitAll()
+            authorize.requestMatchers(AUTH_WHITE_LIST)
+                    .permitAll()
+                    .requestMatchers(HttpMethod.POST,"/patient")
+                    .permitAll()
                     .anyRequest().authenticated();
         });
         http.oauth2ResourceServer(t -> {
@@ -41,34 +48,9 @@ public class SecurityConfig {
                 jwtConfigurer.jwtAuthenticationConverter(jwtAuthConverter);
             });
         });
-        //http.addFilterAfter(createPolicyEnforcerFilter(), BearerTokenAuthenticationFilter.class);
         http.sessionManagement(t -> {
             t.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         });
         return http.build();
     }
-
-    /*private ServletPolicyEnforcerFilter createPolicyEnforcerFilter(){
-        return new ServletPolicyEnforcerFilter(new ConfigurationResolver() {
-            @Override
-            public PolicyEnforcerConfig resolve(HttpRequest httpRequest) {
-                try{
-                    return JsonSerialization.readValue(
-                            getClass().getResourceAsStream("/policy-enforcer.json"),
-                            PolicyEnforcerConfig.class
-                    );
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        });
-    }*/
-
-    /*@Bean
-    public DefaultMethodSecurityExpressionHandler msecurity(){
-        DefaultMethodSecurityExpressionHandler defaultMethodSecurityExpressionHandler =
-                new DefaultMethodSecurityExpressionHandler();
-        defaultMethodSecurityExpressionHandler.setDefaultRolePrefix("");
-        return defaultMethodSecurityExpressionHandler;
-    }*/
 }

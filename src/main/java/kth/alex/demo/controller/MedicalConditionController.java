@@ -25,7 +25,6 @@ public class MedicalConditionController {
 
     @GetMapping("/medicalCondition/{id}")
     public ResponseEntity<MedicalConditionDTO> getMedicalConditionById(@PathVariable String id) {
-        System.out.println(id + " -----------------------");
         try {
             MedicalConditionDTO medicalConditionDTO = medicalConditionService.findById(id);
             return ResponseEntity.ok(medicalConditionDTO);
@@ -35,6 +34,19 @@ public class MedicalConditionController {
             throw new RuntimeException(e);
         }
     }
+
+    @GetMapping("/{userSocial}/medicalCondition")
+    public ResponseEntity<List<MedicalConditionDTO>> getMedicalConditionByPatientSocialNr(@PathVariable String userSocial) {
+        try {
+            List<MedicalConditionDTO> medicalConditionDTO = medicalConditionService.getAllByPatientSocialNr(userSocial);
+            return ResponseEntity.ok(medicalConditionDTO);
+        } catch (EntityNotFoundException ex) {
+            return ResponseEntity.notFound().build();
+        } catch (ServerErrorException e) {
+            return ResponseEntity.status(500).build();
+        }
+    }
+
     @PostMapping("/medicalCondition")
     public ResponseEntity<String> create(@RequestBody MedicalConditionCreate medicalConditionCreate){
         try{

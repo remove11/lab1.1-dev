@@ -28,5 +28,6 @@ public class PatientDTO {
     Person.Gender gender;
     String keycloakId;
     LocalDateTime createdAt;
+    String email;
 }
 

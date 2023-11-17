@@ -19,4 +19,6 @@ public class OtherPersonalDTO{
         Person.Gender gender;
         String calenderId;
         String employeeId;
+        String keycloakId;
+        String email;
 }

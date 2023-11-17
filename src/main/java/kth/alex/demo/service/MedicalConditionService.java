@@ -11,8 +11,10 @@ import kth.alex.demo.entity.Patient;
 import kth.alex.demo.entityDTO.DoctorDTO;
 import kth.alex.demo.entityDTO.MedicalConditionDTO;
 import kth.alex.demo.repository.DoctorRepository;
+import kth.alex.demo.repository.IdentityRepository;
 import kth.alex.demo.repository.MedicalConditionRepository;
 import kth.alex.demo.repository.PatientRepository;
+import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +30,8 @@ public class MedicalConditionService {
     PatientRepository patientRepository;
     @Autowired
     DoctorRepository doctorRepository;
+    @Autowired
+    IdentityRepository identityRepository;
 
     public List<MedicalConditionDTO> getAll() throws ServerErrorException {
         List<MedicalCondition> medicalConditions;
@@ -48,6 +52,27 @@ public class MedicalConditionService {
         }
         return medicalConditionDTOS;
     }
+
+    public List<MedicalConditionDTO> getAllByPatientSocialNr(String socialNr) throws ServerErrorException {
+        List<MedicalCondition> medicalConditions;
+
+        try {
+            medicalConditions = medicalConditionRepository.findByPatientSocialNr(socialNr);
+        }catch (Exception ex){
+            throw new ServerErrorException(ex.getMessage());
+        }
+
+        List<MedicalConditionDTO> medicalConditionDTOS = new ArrayList<>();
+        for (MedicalCondition m : medicalConditions) {
+            MedicalConditionDTO medicalConditionDTO = new MedicalConditionDTO();
+            medicalConditionDTO.setId(m.getId());
+            medicalConditionDTO.setDiagnos(m.getDiagnos());
+            medicalConditionDTO.setCreatedAt(m.getCreatedAt());
+            medicalConditionDTOS.add(medicalConditionDTO);
+        }
+        return medicalConditionDTOS;
+    }
+
     public MedicalConditionDTO findById(String id) throws NotFoundException {
 
         MedicalCondition m = medicalConditionRepository
@@ -66,11 +91,20 @@ public class MedicalConditionService {
     }
 
     @Transactional
-    public void create(MedicalConditionCreate medicalConditionCreate){
+    public void create(MedicalConditionCreate medicalConditionCreate) throws ServerErrorException {
         MedicalCondition medicalCondition = new MedicalCondition();
 
-        Patient patient = patientRepository.findBySocialNr(medicalConditionCreate.getPatientSocialNr());
-        Doctor doctor = doctorRepository.findByEmployeeId(medicalConditionCreate.getDoctorEmployeeId());
+        String doctorId = identityRepository.getUserId().orElseThrow(()->new ServerErrorException("No user id"));
+
+        Patient patient;
+        Doctor doctor;
+
+        try{
+            patient = patientRepository.findBySocialNr(medicalConditionCreate.getPatientSocialNr());
+            doctor = doctorRepository.findByKeycloakId(doctorId);
+        }catch (Exception ex){
+            throw new ServerErrorException("Cannot get patient and doctor");
+        }
 
         medicalCondition.setPatient(patient);
         medicalCondition.setDoctor(doctor);

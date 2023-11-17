@@ -1,6 +1,5 @@
 package kth.alex.demo.service;
 
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import kth.alex.demo.Exeption.NotFoundException;
 import kth.alex.demo.Exeption.ServerErrorException;
@@ -9,9 +8,7 @@ import kth.alex.demo.entity.Doctor;
 import kth.alex.demo.entity.Encounter;
 import kth.alex.demo.entity.Patient;
 import kth.alex.demo.entityDTO.EncounterDTO;
-import kth.alex.demo.repository.DoctorRepository;
-import kth.alex.demo.repository.EncounterRepository;
-import kth.alex.demo.repository.PatientRepository;
+import kth.alex.demo.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +23,10 @@ public class EncounterService {
     PatientRepository patientRepository;
     @Autowired
     DoctorRepository doctorRepository;
+    @Autowired
+    IdentityRepository identityRepository;
+    @Autowired
+    ObservationRepository observationRepository;
 
     public List<EncounterDTO> getAll() throws ServerErrorException {
         List<Encounter> encounters;
@@ -47,6 +48,29 @@ public class EncounterService {
         return encounterDTOs;
     }
 
+    public List<EncounterDTO> findByPersonNr(String personNr) throws ServerErrorException {
+        List<Encounter> encounters;
+        try{
+            encounters = encounterRepository.findByPersonNr(personNr);
+        }catch (Exception ex){
+            throw new ServerErrorException(ex.getMessage());
+        }
+
+        List<EncounterDTO> encounterDTOs = new ArrayList<>();
+        for (Encounter e : encounters) {
+            EncounterDTO encounterDTO = new EncounterDTO();
+            encounterDTO.setId(e.getId());
+            encounterDTO.setDescription(e.getDescription());
+            encounterDTO.setCreatedAt(e.getCreatedAt());
+            encounterDTO.setPatientName(e.getPatient().getLastname() + " " + e.getPatient().getSurename());
+            encounterDTO.setDoctorName(e.getCreatedBy().getLastname() + " " + e.getCreatedBy().getSurename());
+            encounterDTO.setDoctorEmployeeId(e.getCreatedBy().getEmployeeId());
+            encounterDTO.setPatientSocialNr(e.getPatient().getSocialNr());
+
+            encounterDTOs.add(encounterDTO);
+        }
+        return encounterDTOs;
+    }
 
     public EncounterDTO findById(String id) throws NotFoundException {
         Encounter e = encounterRepository
@@ -59,6 +83,8 @@ public class EncounterService {
         encounterDTO.setPatientName(e.getPatient().getSurename());
         encounterDTO.setDescription(e.getDescription());
         encounterDTO.setCreatedAt(e.getCreatedAt());
+        encounterDTO.setPatientSocialNr(e.getPatient().getSocialNr());
+        encounterDTO.setDoctorEmployeeId(e.getCreatedBy().getEmployeeId());
 
         return encounterDTO;
     }
@@ -93,4 +119,3 @@ public class EncounterService {
         }
     }
 }
-

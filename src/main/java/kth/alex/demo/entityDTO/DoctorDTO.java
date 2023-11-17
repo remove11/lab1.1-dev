@@ -2,6 +2,8 @@ package kth.alex.demo.entityDTO;
 import kth.alex.demo.entity.Person;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -15,5 +17,7 @@ public class DoctorDTO {
         private String phoneNr;
         private Person.Gender gender;
         private String degreeId;
+        String email;
+        private String keycloakId;
         private String employeeId;
 }

@@ -5,6 +5,8 @@ import kth.alex.demo.Exeption.NotFoundException;
 import kth.alex.demo.Exeption.ServerErrorException;
 import kth.alex.demo.RequestBodyData.UserCreationRequest;
 import kth.alex.demo.entityDTO.PatientDTO;
+import kth.alex.demo.repository.IdentityRepository;
+import kth.alex.demo.repository.KeycloakRepository;
 import kth.alex.demo.service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +19,10 @@ import java.util.List;
 public class PatientController {
     @Autowired
     private PatientService patientService;
+    @Autowired
+    private IdentityRepository identityRepository;
+    @Autowired
+    private KeycloakRepository keycloakRepository;
 
     @GetMapping("/patient")
     public List<PatientDTO> sayHello() throws ServerErrorException {
@@ -28,6 +34,7 @@ public class PatientController {
         System.out.println(socialNr + " -----------------------");
         try {
             PatientDTO patientDTO = patientService.getBySocial(socialNr);
+
             return ResponseEntity.ok(patientDTO);
         }  catch (NotFoundException | ServerErrorException e) {
             throw new RuntimeException(e);
@@ -35,6 +42,7 @@ public class PatientController {
     }
     @PostMapping("/patient")
     public ResponseEntity<String> create(@RequestBody UserCreationRequest userCreationRequest){
+        System.out.println("inside create patient");
         try{
             patientService.save(userCreationRequest);
             return ResponseEntity.ok("Doctor created");

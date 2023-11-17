@@ -45,7 +45,9 @@ public class OtherPersonalService {
                     o.getPhoneNr(),
                     o.getGender(),
                     o.getCalenderId(),
-                    o.getEmployeeId()
+                    o.getEmployeeId(),
+                    o.getKeycloakId(),
+                    ""
             );
             otherPersonalDTOS.add(otherPersonalDTO);
         }
@@ -54,9 +56,11 @@ public class OtherPersonalService {
 
     public OtherPersonalDTO getBySocial(String socialNr) throws ServerErrorException, NotFoundException {
         OtherPersonal o;
+        UserRepresentation userR;
 
         try {
             o = otherPersonalRepository.findBySocialNr(socialNr);
+            userR = keycloakRepository.getUserById(o.getKeycloakId()).orElseThrow(()->new NotFoundException("Keycloak user not found"));
         }catch (Exception ex){
             throw new ServerErrorException(ex.getMessage());
         }
@@ -73,7 +77,9 @@ public class OtherPersonalService {
                     o.getPhoneNr(),
                     o.getGender(),
                     o.getCalenderId(),
-                    o.getEmployeeId()
+                    o.getEmployeeId(),
+                    o.getKeycloakId(),
+                    userR.getEmail()
             );
 
     }
@@ -81,7 +87,7 @@ public class OtherPersonalService {
     public OtherPersonalDTO save(UserCreationRequest otherPersonalCreation) throws ClientErrorException, ServerErrorException, NotFoundException {
         OtherPersonal otherPersonal = new OtherPersonal(otherPersonalCreation);
 
-        UserRepresentation user = keycloakRepository.createUser(otherPersonalCreation).orElseThrow();
+        UserRepresentation user = keycloakRepository.createUser(otherPersonalCreation,"STAFF").orElseThrow();
 
         otherPersonal.setKeycloakId(user.getId());
 
@@ -100,7 +106,9 @@ public class OtherPersonalService {
                 o.getPhoneNr(),
                 o.getGender(),
                 o.getCalenderId(),
-                o.getEmployeeId()
+                o.getEmployeeId(),
+                o.getKeycloakId(),
+                user.getEmail()
         );
     }
 }

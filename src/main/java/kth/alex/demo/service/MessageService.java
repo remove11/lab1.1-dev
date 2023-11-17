@@ -96,5 +96,31 @@ public class MessageService {
         }
     }
 
-}
+    public List<MessageDTO> getConversation(String p1, String p2) throws ServerErrorException {
+        List<Message> messages;
+        try {
+            System.out.println("----------------1");
+            messages = messageRepository.findConversation(p1, p2);
+            System.out.println("----------------2");
+        }catch (Exception ex){
+            System.out.println("----------------3");
+            System.out.println(ex);
+            System.out.println(ex.getMessage());
+            throw new ServerErrorException(ex.getMessage());
+        }
 
+        List<MessageDTO> messageDTOs = new ArrayList<>();
+        for (Message m : messages) {
+            MessageDTO messageDTO = new MessageDTO();
+            messageDTO.setId(m.getId());
+            messageDTO.setContent(m.getContent());
+            messageDTO.setCreatedAt(m.getCreatedAt());
+            messageDTO.setReceiverName(m.getReceiver().getLastname() + " " + m.getReceiver().getSurename());
+            messageDTO.setReceiverSocialNr(m.getReceiver().getSocialNr());
+            messageDTO.setSenderName(m.getSender().getLastname() + " " + m.getSender().getSurename());
+            messageDTO.setSenderSocialNr(m.getSender().getSocialNr());
+            messageDTOs.add(messageDTO);
+        }
+        return messageDTOs;
+    }
+}

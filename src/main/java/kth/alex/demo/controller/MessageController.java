@@ -9,6 +9,7 @@ import kth.alex.demo.entityDTO.MessageDTO;
 import kth.alex.demo.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -41,6 +42,17 @@ public class MessageController {
             messageService.create(messageCreate);
             return ResponseEntity.ok("Message sent");
         }catch (Exception ex){
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @GetMapping("/message/{p1}/{p2}")
+    public ResponseEntity<List<MessageDTO>> getConversation(@PathVariable String p1, @PathVariable String p2){
+        try{
+            List<MessageDTO> messages = messageService.getConversation(p1, p2);
+            return ResponseEntity.ok(messages);
+        }catch (Exception ex){
+            System.out.println(ex.getMessage());
             return ResponseEntity.badRequest().build();
         }
     }

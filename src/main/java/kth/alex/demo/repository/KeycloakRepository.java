@@ -7,6 +7,7 @@ import kth.alex.demo.RequestBodyData.UserCreationRequest;
 import kth.alex.demo.utils.KeycloakUtil;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.representations.idm.CredentialRepresentation;
+import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -70,9 +71,9 @@ public class KeycloakRepository {
         }
     }
 
-    public Optional<UserRepresentation> createUser(UserCreationRequest newUser) throws ServerErrorException, ClientErrorException {
+    public Optional<UserRepresentation> createUser(UserCreationRequest newUser, String role) throws ServerErrorException, ClientErrorException {
         Keycloak keycloak = keycloakUtil.getInstance();
-        UserRepresentation userRep = toUserRep(newUser);
+        UserRepresentation userRep = toUserRep(newUser, role);
 
         Response response = keycloak.realm(realm).users().create(userRep);
         response.close();
@@ -108,7 +109,7 @@ public class KeycloakRepository {
         throw new ServerErrorException("Something gone wrong");
     }
 
-    private UserRepresentation toUserRep(UserCreationRequest user){
+    private UserRepresentation toUserRep(UserCreationRequest user, String role){
         UserRepresentation userRep = new UserRepresentation();
         userRep.setUsername(user.getUsername());
         userRep.setFirstName(user.getSurename());
@@ -121,6 +122,11 @@ public class KeycloakRepository {
         CredentialRepresentation credentialRepresentation = new CredentialRepresentation();
         credentialRepresentation.setValue(user.getPassword());
         credentialRepresentation.setTemporary(false);
+
+        // Set user roles
+        List<String> roles = new ArrayList<>();
+        roles.add(role);
+        userRep.setRealmRoles(roles);
 
         credentialRepresentations.add(credentialRepresentation);
         userRep.setCredentials(credentialRepresentations);
